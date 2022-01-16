@@ -33,9 +33,29 @@ public class DriveConstants {
      * If using the built-in motor velocity PID, update MOTOR_VELO_PID with the tuned coefficients
      * from DriveVelocityPIDTuner.
      */
+
+    //Max Angular Velocity (deg): 22.72732639717049
+    //Max Angular Velocity (rad): 0.39666667580604553
+
+    //Max Angular Velocity (deg): 24.382537365158456   25 0.4411
+    //Max Angular Velocity (rad): 0.425555557012558
+
+    //Max Angular Velocity (deg): 26.22873408271832
+    //Max Angular Velocity (rad): 0.4577777683734894
+
+    //finalX: 46.04850459525986
+    //finalY: -3.897027563249223
+
+    //finalX: 45.50684541821267
+    //finalY: -4.000615368194536
+
+    //finalX: 45.198179698239315
+    //finalY: -4.462877420894193
+
+
     public static final boolean RUN_USING_ENCODER = true;
-    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
-            getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
+    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(25, 0, 15,
+            18);
 
     /*
      * These are physical constants that can be determined from your robot (including the track
@@ -47,7 +67,7 @@ public class DriveConstants {
      */
     public static double WHEEL_RADIUS = 4; // in
     public static double GEAR_RATIO = 0.06666666666666667; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 14.37008; // in
+    public static double TRACK_WIDTH = 12; // in
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -99,10 +119,10 @@ public class DriveConstants {
      * https://github.com/acmerobotics/road-runner-quickstart/issues/91
 
      */
-    public static double MAX_VEL = 90;
-    public static double MAX_ACCEL = 90;
-    public static double MAX_ANG_VEL = Math.toRadians(358.8442205038113);
-    public static double MAX_ANG_ACCEL = Math.toRadians(358.8442205038113);
+    public static double MAX_VEL = 50;
+    public static double MAX_ACCEL = 50;
+    public static double MAX_ANG_VEL = 25;
+    public static double MAX_ANG_ACCEL = 25;
 
 
     public static double encoderTicksToInches(double ticks) {
