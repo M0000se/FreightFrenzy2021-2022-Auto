@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
-public class Alliance_red_trajectory extends LinearOpMode //stichcode incoming
+public class Alliance_red_trajectory extends LinearOpMode //spaghetti code incoming
 {
     @Override
 
