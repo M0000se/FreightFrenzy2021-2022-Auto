@@ -13,9 +13,10 @@ public class MeepMeepTesting {
         // With a field size of 800 pixels
         Pose2d startPose = new Pose2d(0, -60, Math.toRadians(90));
         Vector2d location2 = new Vector2d(-12, -42);
-        Vector2d midpoint = new Vector2d(-30, -42);
-        Pose2d location3 = new Pose2d(-45, -55, Math.toRadians (0));
-        Vector2d storage = new Vector2d(56, -64);
+        //Vector2d midpoint = new Vector2d(-30, -42);
+        Pose2d spinner = new Pose2d(-45, -60, Math.toRadians (90));
+        Pose2d warehouse_midpoint = new Pose2d(-40, -65, Math.toRadians (0));
+        Pose2d warehouse = new Pose2d(40, -65, Math.toRadians (0));
 
         MeepMeep meepMeep = new MeepMeep(700);
 
@@ -31,10 +32,11 @@ public class MeepMeepTesting {
                                 .lineTo(location2)//location of the red shipping hub
                                 .addTemporalMarker(1000, () -> {}) //servo dump
                                 .waitSeconds(1)
-                                .lineToLinearHeading(location3)
+                                .lineToLinearHeading(spinner)
                                 .addTemporalMarker(5000, () -> {}) // motor spinner wheel
                                 .waitSeconds(6)
-                                .splineTo((storage), Math.toRadians(90))
+                                .lineToLinearHeading(warehouse_midpoint)
+                                .lineToLinearHeading(warehouse)
                                 .build());
 
 
