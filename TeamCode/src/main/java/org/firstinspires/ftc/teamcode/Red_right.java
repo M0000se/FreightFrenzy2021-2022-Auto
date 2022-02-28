@@ -20,8 +20,10 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 import java.util.List;
 
-@Autonomous (name = "AUTO BLUE 0 0 0 sec (default)")//STARTUP TIME, AFTER WE DROP THE BLOCK TIME, AND SPINNER POINT DELAY
-public class AllianceBlueTrajectory_left_0_0_0sec extends LinearOpMode //spaghetti code incoming sry
+//TODO: Uhm, I just thought... we are kinda done if we dont see a duck.
+
+@Autonomous (name = "RED RIGHT")//STARTUP TIME, AFTER WE DROP THE BLOCK TIME, AND SPINNER POINT DELAY
+public class Red_right extends LinearOpMode //spaghetti code incoming sry
 {
 
     private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
@@ -128,11 +130,11 @@ public class AllianceBlueTrajectory_left_0_0_0sec extends LinearOpMode //spaghet
 
         waitForStart();
 
-        //int duckpose = getElementPosition();
+        int duckPose = getElementPosition();
 
-        int duckpose = 2;
+        int duckPose = 0;
 
-        //telemetry.addData("!!! Duc pose = ", duckpose);
+        //telemetry.addData("!!! Duc pose = ", duckPose);
         //telemetry.update();
 
         //DRIVE
@@ -164,72 +166,52 @@ public class AllianceBlueTrajectory_left_0_0_0sec extends LinearOpMode //spaghet
 
 
         int offset = 0; //TODO 0 for left, change for right
-        double start_delay = 0.0;
-        double dump_delay = 0.0;
-        double spinner_delay = 0.0;
+        double startDelay = 0.0; // wait after the corresponding part of the trajectory is complete
+        double shipHubDelay = 0.0;
+        double spinDelay = 0.0;
 
+        //TODO: add the abbility to run auto during teleop (break out of auto)
+        //TODO: !!! add the abbillity to change the settings in telemetry
 
+        //TODO: add gracious
+        // professionalism with png class and add a reset to go back to the position once you're done.
 
-
+        double fundamental_shipHubDelay = 0.1; // constant minimal time to complete a corresponding marker
+        double fundamental_spinDelay = 6.0;
+        //add a marker and delay to put the arm up? TODO: not sure if we need to lift the arm up at all actually
 
 
 
         //////////////////////////////////////////////////////////////////////
 
-        Pose2d startPose = new Pose2d((-33+offset), 60, Math.toRadians(90));
-        Pose2d location2 = new Pose2d(7, 22, Math.toRadians(90));
-        //Vector2d midpoint = new Vector2d(-30, 42);
-        Pose2d location3 = new Pose2d(-12, 42, Math.toRadians (0));
-        Vector2d location4 = new Vector2d(-85, 42);
-        Vector2d duckMidpoint = new Vector2d(-85, 53);
-        Pose2d storageMidpoint = new Pose2d(0, 100, Math.toRadians(180));
-        Vector2d storage = new Vector2d(145, 130);
-
-        Lift.setPower(1);
-        sleep(500);
-        Lift.setPower(0);
-
-
-        //make a marker for where to put red
-
-
+        Pose2d startPose = new Pose2d(0, 60, Math.toRadians(-90));
+        Vector2d shippingHub = new Vector2d(-12, 42);
+        //Vector2d midpoint = new Vector2d(-30, -42);
+        Pose2d spinner = new Pose2d(-60, 45, Math.toRadians (0));
+        Pose2d spinner_shift = new Pose2d(-60, 50, Math.toRadians (0));
+        //Pose2d spinner_shift = new Pose2d(-55, 55, Math.toRadians (0));
+        Vector2d warehouse_midpoint = new Vector2d(-25, 65);
+        Pose2d warehouse = new Pose2d(40, 65, Math.toRadians (0));
 
         drive.setPoseEstimate(startPose);
-        //TODO: based on duck position move accordingly
 
-
-
-        /*if(duckpose==1)
-        {
-            location2= new Pose2d(7, 22, Math.toRadians(90));
-        }
-
-        if(duckpose==0)
-        {
-            Lift.setPower(-1);
-            sleep(500);
-            Lift.setPower(0);
-            location2= new Pose2d(7, 22, Math.toRadians(90));
-        }*/
-
+        Lift.setPosition(duckPose); //set lift according to the duck location
         Dump.setPosition(-1.0);
         Spinner.setPower(-0.8);
 
         TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(startPose)
-                .waitSeconds(start_delay)
-                .lineToLinearHeading(location2)//location of the red shipping hub
-                .addTemporalMarker(start_delay+2, () -> {Claw.setPosition(0.5);}) //servo dump
-                .waitSeconds(dump_delay+2)
-                .lineToLinearHeading(location3)
-                .lineToConstantHeading(location4)
-                .lineToConstantHeading(duckMidpoint)
-                .waitSeconds(spinner_delay+3)
-                .splineToSplineHeading(storageMidpoint, Math.toRadians(-50))
-                .lineToConstantHeading((storage))
+                .waitSeconds(startDelay)
+                .lineTo(shippingHub)//location of the red shipping hub
+                .addTemporalMarker(startDelay, () -> {Claw.setPosition(0.5);}) //servo dump
+                .waitSeconds(fundamental_shipHubDelay+shipHubDelay)
+                // shipping hub dump delay + additional delay if we wish
+                .lineToLinearHeading(spinner)
+                .lineToLinearHeading(spinner_shift)
+                .waitSeconds(fundamental_spinDelay+spinDelay)
+                // carousel spinning delay + additional delay if we wish
+                .splineToConstantHeading(warehouse_midpoint, 0)
+                .lineToLinearHeading(warehouse)
                 .build();
-
-
-
 
         if(isStopRequested()) return;
 

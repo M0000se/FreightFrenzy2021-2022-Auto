@@ -12,7 +12,7 @@ public class MeepMeepTesting {
         // Declare a MeepMeep instance
         // With a field size of 800 pixels
 
-        Pose2d startPose = new Pose2d(0, 60, Math.toRadians(-90));
+        Pose2d startPose = new Pose2d(12, 60, Math.toRadians(-90)); //-35 for left, 12 for right
         Vector2d location2 = new Vector2d(-12, 42);
         //Vector2d midpoint = new Vector2d(-30, -42);
         Pose2d spinner = new Pose2d(-60, 45, Math.toRadians (0));
@@ -25,8 +25,8 @@ public class MeepMeepTesting {
 
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Required: Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
-                .setConstraints(50, 50, 25, 25,
-                        12)
+                .setConstraints(70, 70, 25, 25,
+                        15)
                 // Option: Set theme. Default = ColorSchemeRedDark()
                 .setColorScheme(new ColorSchemeRedDark())
 
