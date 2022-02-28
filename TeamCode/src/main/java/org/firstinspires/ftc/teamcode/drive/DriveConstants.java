@@ -54,8 +54,8 @@ public class DriveConstants {
 
 
     public static final boolean RUN_USING_ENCODER = true;
-    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(25, 0, 15,
-            18);
+    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(15, 0, 9,
+            14.55);
 
     /*
      * These are physical constants that can be determined from your robot (including the track
@@ -66,8 +66,8 @@ public class DriveConstants {
      * convenience. Make sure to exclude any gear ratio included in MOTOR_CONFIG from GEAR_RATIO.
      */
     public static double WHEEL_RADIUS = 4; // in
-    public static double GEAR_RATIO = 0.06666666666666667; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 12; // in
+    public static double GEAR_RATIO = 0.04; // output (wheel) speed / input (motor) speed
+    public static double TRACK_WIDTH = 15.24; // in TODO test
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -119,10 +119,10 @@ public class DriveConstants {
      * https://github.com/acmerobotics/road-runner-quickstart/issues/91
 
      */
-    public static double MAX_VEL = 50;
-    public static double MAX_ACCEL = 50;
-    public static double MAX_ANG_VEL = 25;
-    public static double MAX_ANG_ACCEL = 25;
+    public static double MAX_VEL = 70;
+    public static double MAX_ACCEL = 70;
+    public static double MAX_ANG_VEL = 13;
+    public static double MAX_ANG_ACCEL = 13;
 
 
     public static double encoderTicksToInches(double ticks) {
