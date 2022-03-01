@@ -184,14 +184,13 @@ public class Red_right extends LinearOpMode //spaghetti code incoming sry
 
         //////////////////////////////////////////////////////////////////////
 
-        Pose2d startPose = new Pose2d(0, 60, Math.toRadians(-90));
-        Vector2d shippingHub = new Vector2d(-12, 42);
+        Pose2d startPose =          new Pose2d(offset, -60, Math.toRadians(90));
+        Vector2d shippingHub =        new Vector2d(-12, -42);
         //Vector2d midpoint = new Vector2d(-30, -42);
-        Pose2d spinner = new Pose2d(-60, 45, Math.toRadians (0));
-        Pose2d spinner_shift = new Pose2d(-60, 50, Math.toRadians (0));
-        //Pose2d spinner_shift = new Pose2d(-55, 55, Math.toRadians (0));
-        Vector2d warehouse_midpoint = new Vector2d(-25, 65);
-        Pose2d warehouse = new Pose2d(40, 65, Math.toRadians (0));
+        Pose2d spinner =            new Pose2d(-55, -60, Math.toRadians (90));
+        Pose2d warehouse_midpoint = new Pose2d(-40, -65, Math.toRadians (0));
+        Pose2d warehouse =          new Pose2d(40, -65, Math.toRadians (0));
+
 
         drive.setPoseEstimate(startPose);
 
@@ -206,10 +205,9 @@ public class Red_right extends LinearOpMode //spaghetti code incoming sry
                 .waitSeconds(fundamental_shipHubDelay+shipHubDelay)
                 // shipping hub dump delay + additional delay if we wish
                 .lineToLinearHeading(spinner)
-                .lineToLinearHeading(spinner_shift)
                 .waitSeconds(fundamental_spinDelay+spinDelay)
                 // carousel spinning delay + additional delay if we wish
-                .splineToConstantHeading(warehouse_midpoint, 0)
+                .lineToLinearHeading(warehouse_midpoint)
                 .lineToLinearHeading(warehouse)
                 .build();
 

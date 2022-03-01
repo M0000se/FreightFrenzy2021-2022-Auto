@@ -11,7 +11,7 @@ public class MeepMeepTesting {
     public static void main(String[] args) {
         // Declare a MeepMeep instance
         // With a field size of 800 pixels
-
+        /*
         Pose2d startPose = new Pose2d(12, 60, Math.toRadians(-90)); //-35 for left, 12 for right
         Vector2d location2 = new Vector2d(-12, 42);
         //Vector2d midpoint = new Vector2d(-30, -42);
@@ -42,7 +42,7 @@ public class MeepMeepTesting {
                                 .splineToConstantHeading(warehouse_midpoint, 0)
                                 .lineToLinearHeading(warehouse)
                                 .build());
-
+        */
 
         /*Pose2d startPose = new Pose2d(0, 60, Math.toRadians(-90));
         Vector2d location2 = new Vector2d(-12, 42);
@@ -75,10 +75,10 @@ public class MeepMeepTesting {
         */
 
 
-        /*Pose2d startPose = new Pose2d(0, -60, Math.toRadians(90));
+        Pose2d startPose = new Pose2d(0, -60, Math.toRadians(90));
         Vector2d location2 = new Vector2d(-12, -42);
         //Vector2d midpoint = new Vector2d(-30, -42);
-        Pose2d spinner = new Pose2d(-45, -60, Math.toRadians (90));
+        Pose2d spinner = new Pose2d(-55, -60, Math.toRadians (90));
         Pose2d warehouse_midpoint = new Pose2d(-40, -65, Math.toRadians (0));
         Pose2d warehouse = new Pose2d(40, -65, Math.toRadians (0));
 
@@ -103,7 +103,7 @@ public class MeepMeepTesting {
                                 .lineToLinearHeading(warehouse)
                                 .build());
 
-         */
+
 
 
         // Set field image
