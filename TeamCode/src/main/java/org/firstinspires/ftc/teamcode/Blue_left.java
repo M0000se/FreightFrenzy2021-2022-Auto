@@ -25,7 +25,6 @@ import java.util.List;
 @Autonomous (name = "BLUE RIGHT")//STARTUP TIME, AFTER WE DROP THE BLOCK TIME, AND SPINNER POINT DELAY
 public class Blue_left extends LinearOpMode //spaghetti code incoming sry
 {
-
     private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
     private static final String[] LABELS = {
             "Ball",
@@ -41,63 +40,7 @@ public class Blue_left extends LinearOpMode //spaghetti code incoming sry
 
 
 
-    static int x_center=200; //middle of the webcam view
-    static int center_accuracy = 70;
 
-    //------------------------------------------------------------------------------------
-
-    int getElementPosition ()
-    {
-        initVuforia();
-        initTfod();
-
-
-        if (tfod != null) {
-            tfod.activate();
-
-
-            tfod.setZoom(1, 16.0 / 9.0);
-        }
-
-        /** Wait for the game to begin */
-
-        FtcDashboard.getInstance().startCameraStream(vuforia, 0);
-
-        for (;;)
-        {
-            if (tfod != null)
-            {
-                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                if (updatedRecognitions != null) {
-                    telemetry.addData("# Object Detected", updatedRecognitions.size());
-
-                    // step through the list of recognitions and display boundary info.
-                    int i = 0;
-                    boolean isDuckDetected = false;     //  ** ADDED **
-                    for (Recognition recognition : updatedRecognitions) {
-                        i++;
-                        // check label to see if the camera now sees a Duck
-                        if (recognition.getLabel().equals("Duck")) {            //  ** ADDED **
-                            isDuckDetected = true;
-                            telemetry.addData("Object Detected", "Looks like a duck to me");      //  ** ADDED **
-                            telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
-                            telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
-                                    recognition.getLeft(), recognition.getTop());
-                            telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
-                                    recognition.getRight(), recognition.getBottom());
-
-                            if (recognition.getLeft() > x_center+center_accuracy) return 2;
-                            else if (recognition.getLeft() < x_center-center_accuracy) return 0;
-                            else return 1; //TODO: test*/
-
-                        } else isDuckDetected = false;
-
-                    }
-                    telemetry.update();
-                }
-            }
-        }
-    }
     //:TODO take the lowest reductions with the motor in the clean tray. use the arm for
     // intake but put a button sensor so that it
     // would slowly move around the freight and if it collects one it will proceed.
@@ -116,38 +59,28 @@ public class Blue_left extends LinearOpMode //spaghetti code incoming sry
 
 
     @Override
-    public void runOpMode() throws InterruptedException {
-        telemetry.addData(">", "Press Play to start op mode");
-        telemetry.update();
-
-        waitForStart();
+    public void runOpMode() throws InterruptedException
+    {
+        /////////////////////////// INITIALISATION ////////////////////////////
+        initVuforia();
+        initTfod();
 
         int duckPose = 0;
-        duckPose = getElementPosition(); // TODO check with the positions
+        duckPose = Webcam.getElementPosition(tfod, vuforia); // TODO check with the positions
 
         //telemetry.addData("!!! Duc pose = ", duckPose);
         //telemetry.update();
 
-        //DRIVE
-        DcMotor Lift;
-        DcMotor RightFront;
-        DcMotor RightRear;
-        DcMotor LeftRear;
-        DcMotor LeftFront;
-        DcMotor Spinner;
-        Servo Claw;
-        AndroidSoundPool androidSoundPool;
-        Servo Dump;
-
-
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        Lift = hardwareMap.get(DcMotor.class, "Lift");
-        Spinner = hardwareMap.get(DcMotor.class, "Spinner");
-        Claw = hardwareMap.get(Servo.class, "Claw");
-        androidSoundPool = new AndroidSoundPool();
+        DcMotor Lift = hardwareMap.get(DcMotor.class, "Lift");
+        DcMotor Spinner = hardwareMap.get(DcMotor.class, "Spinner");
+        Servo Claw = hardwareMap.get(Servo.class, "Claw");
+        AndroidSoundPool androidSoundPool = new AndroidSoundPool();
         Claw.setPosition(1);
-        Dump = hardwareMap.get(Servo.class, "Dump");
+        Servo Dump = hardwareMap.get(Servo.class, "Dump");
         Lift.setDirection(DcMotorSimple.Direction.FORWARD);
+        Lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        Lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         //////////////////////////////////////////////////////////////////
 
@@ -156,26 +89,23 @@ public class Blue_left extends LinearOpMode //spaghetti code incoming sry
 
 
 
-        int offset = 12; //TODO 0 for left, change for right  -35 for left, 12 for right
-        double startDelay = 0.0; // wait after the corresponding part of the trajectory is complete
-        double shipHubDelay = 0.0;
-        double spinDelay = 0.0;
+
 
         //TODO: add the abbility to run auto during teleop (break out of auto)
         //TODO: !!! add the abbillity to change the settings in telemetry
 
         //TODO: add gracious
         // professionalism with png class and add a reset to go back to the position once you're done.
+        // An auto that goes to block, then proceeds with its usual schedule !!!
 
-        double fundamental_shipHubDelay = 0.1; // constant minimal time to complete a corresponding marker
-        double fundamental_spinDelay = 6.0;
+
         //add a marker and delay to put the arm up? TODO: not sure if we need to lift the arm up at all actually
 
 
 
         //////////////////////////////////////////////////////////////////////
 
-        Pose2d startPose = new Pose2d(offset, 60, Math.toRadians(-90));
+        Pose2d startPose = new Pose2d(Constants.offset, 60, Math.toRadians(-90));
         Vector2d shippingHub = new Vector2d(-12, 42);
         //Vector2d midpoint = new Vector2d(-30, -42);
         Pose2d spinner = new Pose2d(-60, 45, Math.toRadians (0));
@@ -186,19 +116,29 @@ public class Blue_left extends LinearOpMode //spaghetti code incoming sry
 
         drive.setPoseEstimate(startPose);
 
-        Lift.setPosition(duckPose); //set lift according to the duck location
+        telemetry.addData(">", "Press Play to start op mode");
+        telemetry.update();
+        waitForStart();
+
+        /////////////////////////// AUTO ////////////////////////////
+
+        //set lift according to the duck location
+        if(duckPose==0) Lift.setTargetPosition(Constants.low);
+        if(duckPose==1) Lift.setTargetPosition(Constants.mid);
+        if(duckPose==2) Lift.setTargetPosition(Constants.high);
+
         Dump.setPosition(-1.0);
         Spinner.setPower(-0.8);
 
         TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(startPose)
-                .waitSeconds(startDelay)
+                .waitSeconds(Constants.startDelay)
                 .lineTo(shippingHub)//location of the red shipping hub
-                .addTemporalMarker(startDelay, () -> {Claw.setPosition(0.5);}) //servo dump
-                .waitSeconds(fundamental_shipHubDelay+shipHubDelay)
+                .addTemporalMarker(Constants.startDelay, () -> {Claw.setPosition(0.5);}) //servo dump
+                .waitSeconds(Constants.blue_basic_shipHubDelay+Constants.shipHubDelay)
                 // shipping hub dump delay + additional delay if we wish
                 .lineToLinearHeading(spinner)
                 .lineToLinearHeading(spinner_shift)
-                .waitSeconds(fundamental_spinDelay+spinDelay)
+                .waitSeconds(Constants.blue_basic_spinDelay+Constants.spinDelay)
                 // carousel spinning delay + additional delay if we wish
                 .splineToConstantHeading(warehouse_midpoint, 0)
                 .lineToLinearHeading(warehouse)
@@ -209,10 +149,6 @@ public class Blue_left extends LinearOpMode //spaghetti code incoming sry
         drive.followTrajectorySequence(trajSeq);
     }
 
-
-    /**
-     * Initialize the Vuforia localization engine.
-     */
     private void initVuforia() {
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
@@ -231,7 +167,8 @@ public class Blue_left extends LinearOpMode //spaghetti code incoming sry
     /**
      * Initialize the TensorFlow Object Detection engine.
      */
-    private void initTfod() {
+    private void initTfod()
+    {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
