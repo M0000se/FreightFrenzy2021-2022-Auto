@@ -143,7 +143,7 @@ public class AllianceBlueTrajectory_barrier extends LinearOpMode //spaghetti cod
         //telemetry.update();
 
         //DRIVE
-        DcMotor Lift;
+        DcMotor lift;
         DcMotor RightFront;
         DcMotor RightRear;
         DcMotor LeftRear;
@@ -155,13 +155,13 @@ public class AllianceBlueTrajectory_barrier extends LinearOpMode //spaghetti cod
 
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        Lift = hardwareMap.get(DcMotor.class, "Lift");
+        lift = hardwareMap.get(DcMotor.class, "Lift");
         Spinner = hardwareMap.get(DcMotor.class, "Spinner");
         Claw = hardwareMap.get(Servo.class, "Claw");
         androidSoundPool = new AndroidSoundPool();
         Claw.setPosition(1);
         Dump = hardwareMap.get(Servo.class, "Dump");
-        Lift.setDirection(DcMotorSimple.Direction.FORWARD);
+        lift.setDirection(DcMotorSimple.Direction.FORWARD);
 
         int offset = 0; //TODO 0 for left, change for right
 
@@ -174,9 +174,9 @@ public class AllianceBlueTrajectory_barrier extends LinearOpMode //spaghetti cod
         Pose2d storageMidpoint = new Pose2d(0, 100, Math.toRadians(180));
         Vector2d storage = new Vector2d(120, 130);
 
-        Lift.setPower(1);
+        lift.setPower(1);
         sleep(500);
-        Lift.setPower(0);
+        lift.setPower(0);
 
 
         //make a marker for where to put red
@@ -195,9 +195,9 @@ public class AllianceBlueTrajectory_barrier extends LinearOpMode //spaghetti cod
 
         if(duckpose==0)
         {
-            Lift.setPower(-1);
+            lift.setPower(-1);
             sleep(500);
-            Lift.setPower(0);
+            lift.setPower(0);
             location2= new Pose2d(7, 22, Math.toRadians(90));
         }*/
 

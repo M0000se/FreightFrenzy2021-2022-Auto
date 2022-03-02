@@ -110,9 +110,9 @@ public class Red_right extends LinearOpMode //spaghetti code incoming sry
         ///////////////////////////////// AUTO ///////////////////////////////////////
 
         //set lift according to the duck location
-        if(duckPose==0) Lift.setTargetPosition(Constants.low);
-        if(duckPose==1) Lift.setTargetPosition(Constants.mid);
-        if(duckPose==2) Lift.setTargetPosition(Constants.high);
+        if(duckPose==0) Lift.setTargetPosition(Constants.liftLow);
+        if(duckPose==1) Lift.setTargetPosition(Constants.liftMid);
+        if(duckPose==2) Lift.setTargetPosition(Constants.liftHigh);
 
         Dump.setPosition(-1.0);
         Spinner.setPower(-0.8);

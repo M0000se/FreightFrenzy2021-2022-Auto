@@ -23,10 +23,10 @@ import java.util.List;
 
 //TODO: Uhm, I just thought... we are kinda screwed if we dont see a duck.
 
-@Autonomous (name = "BLUE RIGHT")//STARTUP TIME, AFTER WE DROP THE BLOCK TIME, AND SPINNER POINT DELAY
-public class Blue_left extends LinearOpMode //spaghetti code incoming sry
+@Autonomous (name = "TEST!!!")//STARTUP TIME, AFTER WE DROP THE BLOCK TIME, AND SPINNER POINT DELAY
+public class test extends LinearOpMode //spaghetti code incoming sry
 {
-    private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
+    /*private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
     private static final String[] LABELS = {
             "Ball",
             "Cube",
@@ -37,7 +37,7 @@ public class Blue_left extends LinearOpMode //spaghetti code incoming sry
     private static final String VUFORIA_KEY =
             "AQ6C1J//////AAABmbFbgnFY8EZ5qg3cWA0ah41DbnifisxJLGcs/rleVs6vR426D48HVqkbcQcAoS2psojauMyRXL6EokX3ArzBtz0MZhNocumRhg5E0AUc8uZL8NAmpq/DwfWrK0tbffRw9VxAcOUVErt01llobKRzcR0vWAfurZ82ZH7a1MVM+ZApi3lxOoJYOEFzbt0JQufS6dYQm31m6/BVfQ63wL+aU3El7rURTxW/2qvSZt6kROmCnaZmNPSdfXGPy8j2xcyKL0vb0pjr8P9FgpktgXYmU5lpGX/lcD40JiLXQGNLD5k2inZtjVYzyvBtPXZ3Z1fqnh5Mp3jcydAa8DofLGHZs2UuC7fkAAAco11XG+w3v9K5";
     private VuforiaLocalizer vuforia;
-    private TFObjectDetector tfod;
+    private TFObjectDetector tfod;*/
 
 
 
@@ -45,8 +45,8 @@ public class Blue_left extends LinearOpMode //spaghetti code incoming sry
     public void runOpMode() throws InterruptedException
     {
         /////////////////////////// INITIALISATION ////////////////////////////
-        initVuforia();
-        initTfod();
+        /*initVuforia();
+        initTfod();*/
 
         int duckPose = 0;
         //duckPose = Webcam.getElementPosition(tfod, vuforia); // TODO check with the positions
@@ -61,14 +61,22 @@ public class Blue_left extends LinearOpMode //spaghetti code incoming sry
         AndroidSoundPool androidSoundPool = new AndroidSoundPool();
         Claw.setPosition(1);
         Servo Dump = hardwareMap.get(Servo.class, "Dump");
-        lift.setDirection(DcMotorSimple.Direction.FORWARD);
+        //lift.setDirection(DcMotorSimple.Direction.FORWARD);
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        Lift.runToPosition(Constants.liftLow, lift);
+
+        /*while(opModeIsActive())
+        {
+            telemetry.addData("encoder", lift.getCurrentPosition());
+            telemetry.update();
+        }*/
 
 
 
-        Pose2d startPose = new Pose2d(Constants.offset, 60, Math.toRadians(-90));
+
+        /*Pose2d startPose = new Pose2d(Constants.offset, 60, Math.toRadians(-90));
         Vector2d shippingHub = new Vector2d(-12, 42);
         //Vector2d midpoint = new Vector2d(-30, -42);
         Pose2d spinner = new Pose2d(-60, 45, Math.toRadians (0));
@@ -77,7 +85,7 @@ public class Blue_left extends LinearOpMode //spaghetti code incoming sry
         Vector2d warehouse_midpoint = new Vector2d(-25, 65);
         Pose2d warehouse = new Pose2d(40, 65, Math.toRadians (0));
 
-        drive.setPoseEstimate(startPose);
+        drive.setPoseEstimate(startPose);*/
 
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
@@ -86,14 +94,14 @@ public class Blue_left extends LinearOpMode //spaghetti code incoming sry
         /////////////////////////// AUTO ////////////////////////////
 
         //set lift according to the duck location
-        if(duckPose==0) Lift.runToPosition(Constants.liftLow, lift);
+        /*if(duckPose==0) Lift.runToPosition(Constants.liftLow, lift);
         if(duckPose==1) Lift.runToPosition(Constants.liftMid, lift);
-        if(duckPose==2) Lift.runToPosition(Constants.liftHigh, lift);
+        if(duckPose==2) Lift.runToPosition(Constants.liftHigh, lift);*/
 
         Dump.setPosition(-1.0);
         Spinner.setPower(-0.8);
 
-        TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(startPose)
+        /*TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(startPose)
                 .waitSeconds(Constants.startDelay)
                 .lineTo(shippingHub)//location of the red shipping hub
                 .addTemporalMarker(Constants.startDelay, () -> {Claw.setPosition(0.5);}) //servo dump
@@ -105,17 +113,15 @@ public class Blue_left extends LinearOpMode //spaghetti code incoming sry
                 // carousel spinning delay + additional delay if we wish
                 .splineToConstantHeading(warehouse_midpoint, 0)
                 .lineToLinearHeading(warehouse)
-                .build();
+                .build();*/
 
         if(isStopRequested()) return;
 
-        drive.followTrajectorySequence(trajSeq);
+        //drive.followTrajectorySequence(trajSeq);
     }
 
-    private void initVuforia() {
-        /*
-         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
-         */
+    /* private void initVuforia() {
+
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
@@ -127,9 +133,6 @@ public class Blue_left extends LinearOpMode //spaghetti code incoming sry
         // Loading trackables is not necessary for the TensorFlow Object Detection engine.
     }
 
-    /**
-     * Initialize the TensorFlow Object Detection engine.
-     */
     private void initTfod()
     {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
@@ -140,7 +143,7 @@ public class Blue_left extends LinearOpMode //spaghetti code incoming sry
         tfodParameters.inputSize = 320;
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
-    }
+    }*/
 
 }
 

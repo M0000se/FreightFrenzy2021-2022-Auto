@@ -136,7 +136,7 @@ public class AllianceRedTrajectory_left_ESCAPE extends LinearOpMode //spaghetti 
         //telemetry.update();
 
         //DRIVE
-        DcMotor Lift;
+        DcMotor lift;
         DcMotor RightFront;
         DcMotor RightRear;
         DcMotor LeftRear;
@@ -148,13 +148,13 @@ public class AllianceRedTrajectory_left_ESCAPE extends LinearOpMode //spaghetti 
 
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        Lift = hardwareMap.get(DcMotor.class, "Lift");
+        lift = hardwareMap.get(DcMotor.class, "Lift");
         Spinner = hardwareMap.get(DcMotor.class, "Spinner");
         Claw = hardwareMap.get(Servo.class, "Claw");
         Claw.setPosition(1);
         androidSoundPool = new AndroidSoundPool();
         Dump = hardwareMap.get(Servo.class, "Dump");
-        Lift.setDirection(DcMotorSimple.Direction.FORWARD);
+        lift.setDirection(DcMotorSimple.Direction.FORWARD);
 
         int offset = 0; //TODO 0 for left, change for right
         double escape_delay=3.0;
@@ -175,9 +175,9 @@ public class AllianceRedTrajectory_left_ESCAPE extends LinearOpMode //spaghetti 
         drive.setPoseEstimate(startPose);
 
 
-        Lift.setPower(1);
+        lift.setPower(1);
         sleep(500);
-        Lift.setPower(0);
+        lift.setPower(0);
 
         Dump.setPosition(-1.0);
         Spinner.setPower(0.8);
