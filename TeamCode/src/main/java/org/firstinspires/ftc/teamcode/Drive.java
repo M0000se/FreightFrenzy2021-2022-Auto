@@ -69,6 +69,7 @@ public class Drive extends LinearOpMode {
         boolean init=false;
         int override = 0; // 0 for no override, 1 for lift override, 2 for total override
         boolean direction = false;
+        boolean lift_complete = false;
 
         double currentTime = time.time();
         double dump_position=0;
@@ -90,8 +91,8 @@ public class Drive extends LinearOpMode {
                 Horizontal = gamepad1.right_stick_x * gamepad1.right_stick_x * gamepad1.right_stick_x * 1 * mult;
                 Pivot = gamepad1.left_stick_x * gamepad1.left_stick_x * gamepad1.left_stick_x * 0.6*mult;
 
-                if(gamepad1.left_bumper) mult = 1;// 50% speed
-                else mult = 0.5;
+                if(gamepad1.left_bumper) mult = 1;
+                else mult = 0.5; // 50% speed
 
                 // switch modes
 
@@ -136,15 +137,15 @@ public class Drive extends LinearOpMode {
                     {
                         //telemetry.addData("direction",direction );
                         //stop();
-                        boolean dont_allocate_memory_like_this = false; //TODO: fix
-                        if(direction==false) dont_allocate_memory_like_this = Lift.updatePosition(Constants.liftLow, lift);
-                        if(direction==true)  dont_allocate_memory_like_this = Lift.updatePosition(Constants.liftHigh, lift);
-                        if(dont_allocate_memory_like_this)
+                         //TODO: fixed
+                        if(direction==false) lift_complete = Lift.updatePosition(Constants.liftIntake, lift);
+                        if(direction==true)  lift_complete = Lift.updatePosition(Constants.liftHigh, lift);
+                        if(lift_complete)
                         {
                             dump_position=1;
                             activate=false;
-                            if(direction==true)  dump_position=0;
-                            if(direction==false) dump_position=1;
+                            if(direction==true)  dump_position=Constants.dumpMid;
+                            if(direction==false) dump_position=Constants.dumpLow; //TODO fix
                         }
                     }
                 }
