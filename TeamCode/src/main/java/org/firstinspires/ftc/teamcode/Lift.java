@@ -8,12 +8,12 @@ public class Lift // pid controller.
     {
          if(motor.getCurrentPosition()<(pos-Constants.p_accuracy)) 
          {
-             motor.setPower(Math.min(((pos-Constants.p_accuracy)-motor.getCurrentPosition())*Constants.i,1));
+             motor.setPower(Math.min(((pos-Constants.p_accuracy)-motor.getCurrentPosition())*Constants.p,1));
              return false;
          } 
          if(motor.getCurrentPosition()>(pos+Constants.p_accuracy))
          {
-             motor.setPower(Math.max(((pos+Constants.p_accuracy)-motor.getCurrentPosition())*Constants.i,-1));
+             motor.setPower(Math.max(((pos+Constants.p_accuracy)-motor.getCurrentPosition())*Constants.p,-1));
              return false;
          }
          return true; //we are within the accuracy 
@@ -25,11 +25,11 @@ public class Lift // pid controller.
         {
             if(motor.getCurrentPosition()<(pos-Constants.p_accuracy))
             {
-                motor.setPower(Math.min(((pos-Constants.p_accuracy)-motor.getCurrentPosition())*Constants.i,1));
+                motor.setPower(Math.min(((pos-Constants.p_accuracy)-motor.getCurrentPosition())*Constants.p,1));
             }
             else if(motor.getCurrentPosition()>(pos+Constants.p_accuracy))
             {
-                motor.setPower(Math.max(((pos+Constants.p_accuracy)-motor.getCurrentPosition())*Constants.i,-1));
+                motor.setPower(Math.max(((pos+Constants.p_accuracy)-motor.getCurrentPosition())*Constants.p,-1));
             }
             else return; //we are within the accuracy
         }

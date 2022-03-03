@@ -20,7 +20,7 @@ public class Constants
     public static int liftMid  = -1; //encoder value for the mid ship hub position of the lift
     public static int liftHigh = 0; //encoder value for the high ship hub position of the lift
     public static int p_accuracy = 50; // used by lift_pid
-    public static double i = 0.005;
+    public static double p = 0.005;
 
     //Dump variables (Dump is arm)
     public static double dumpStraight = 0.775; //position value for the Intake position of the dump (straight angle)

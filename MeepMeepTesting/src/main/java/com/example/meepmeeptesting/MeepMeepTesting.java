@@ -75,7 +75,7 @@ public class MeepMeepTesting {
         */
 
 
-        Pose2d startPose = new Pose2d(0, -60, Math.toRadians(90));
+        /*Pose2d startPose = new Pose2d(0, -60, Math.toRadians(90));
         Vector2d location2 = new Vector2d(-12, -42);
         //Vector2d midpoint = new Vector2d(-30, -42);
         Pose2d spinner = new Pose2d(-55, -60, Math.toRadians (90));
@@ -102,9 +102,27 @@ public class MeepMeepTesting {
                                 .lineToLinearHeading(warehouse_midpoint)
                                 .lineToLinearHeading(warehouse)
                                 .build());
+        */
 
+        https://memegenerator.net/img/instances/59602153/gracious-professionalism.jpg
+        Pose2d startPose = new Pose2d(0, -60, Math.toRadians(90));
+        Vector2d location2 = new Vector2d(10, -60);
+        Vector2d very_gracious = new Vector2d(10, 60); //we use gracious proffesionalism in all we do, our auto runs graciously and proffesionally, our teleop is very grasious too. Our team is an example of what a good gracious professional ftc member should be
 
+        MeepMeep meepMeep = new MeepMeep(700);
 
+        RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
+                // Required: Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
+                .setConstraints(50, 50, 25, 25,
+                        12)
+                // Option: Set theme. Default = ColorSchemeRedDark()
+                .setColorScheme(new ColorSchemeRedDark())
+
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(startPose)
+                                .lineTo(location2)//location of the red shipping hub
+                                .lineTo(very_gracious)
+                                .build());
 
         // Set field image
         meepMeep.setBackground(MeepMeep.Background.FIELD_FREIGHTFRENZY_ADI_DARK)

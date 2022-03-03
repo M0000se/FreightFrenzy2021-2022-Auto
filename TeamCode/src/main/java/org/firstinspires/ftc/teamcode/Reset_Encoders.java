@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -23,8 +24,8 @@ import java.util.List;
 
 //TODO: Uhm, I just thought... we are kinda screwed if we dont see a duck.
 
-@Autonomous (name = "TEST!!!")//STARTUP TIME, AFTER WE DROP THE BLOCK TIME, AND SPINNER POINT DELAY
-public class test extends LinearOpMode //spaghetti code incoming sry
+@TeleOp(name = "Reset Encoders")//STARTUP TIME, AFTER WE DROP THE BLOCK TIME, AND SPINNER POINT DELAY
+public class Reset_Encoders extends LinearOpMode //spaghetti code incoming sry
 {
     /*private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
     private static final String[] LABELS = {
@@ -42,7 +43,7 @@ public class test extends LinearOpMode //spaghetti code incoming sry
 
 
     @Override
-    public void runOpMode() throws InterruptedException
+    public void runOpMode()
     {
         /////////////////////////// INITIALISATION ////////////////////////////
         /*initVuforia();
@@ -54,24 +55,34 @@ public class test extends LinearOpMode //spaghetti code incoming sry
         //telemetry.addData("!!! Duc pose = ", duckPose);
         //telemetry.update();
 
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         DcMotor lift = hardwareMap.get(DcMotorEx.class, "Lift");
-        DcMotor Spinner = hardwareMap.get(DcMotor.class, "Spinner");
-        Servo Claw = hardwareMap.get(Servo.class, "Claw");
-        AndroidSoundPool androidSoundPool = new AndroidSoundPool();
-
         Servo Dump = hardwareMap.get(Servo.class, "Dump");
+
         //lift.setDirection(DcMotorSimple.Direction.FORWARD);
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        //Lift.runToPosition(Constants.liftLow, lift);
+        telemetry.addData(">", "Press Play to start op mode");
+        telemetry.update();
+        waitForStart();
 
-        /*while(opModeIsActive())
-        {
-            telemetry.addData("encoder", lift.getCurrentPosition());
-            telemetry.update();
-        }*/
+        if (opModeIsActive()) {
+            while (opModeIsActive()) {
+                telemetry.addData("encoder", lift.getCurrentPosition());
+                telemetry.update();
+                if (gamepad1.dpad_down) lift.setPower(-1);
+                else if (gamepad1.dpad_up) lift.setPower(1);
+                else lift.setPower(0);
+                if (gamepad1.a) {
+                    Dump.setPosition(0);
+                    lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    telemetry.addLine("encoders reset");
+                    telemetry.update();
+
+                    sleep(1000);
+                    return;
+                }
+            }
+        }
 
         //Lift.runToPosition(Constants.LiftLow, lift);
 
@@ -87,9 +98,8 @@ public class test extends LinearOpMode //spaghetti code incoming sry
 
         drive.setPoseEstimate(startPose);*/
 
-        telemetry.addData(">", "Press Play to start op mode");
-        telemetry.update();
-        waitForStart();
+
+
 
         /////////////////////////// AUTO ////////////////////////////
 
@@ -121,13 +131,6 @@ public class test extends LinearOpMode //spaghetti code incoming sry
             telemetry.update();
         }*/
 
-        for(double i = 0; i < 1.0; i+=0.05)
-        {
-            Dump.setPosition(i);
-            sleep(1000);
-            telemetry.addData("servo:", i);
-            telemetry.update();
-        }
 
 
         /*TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(startPose)

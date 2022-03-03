@@ -3,8 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.CRServo;
-import java.util.Locale;
+
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -71,7 +70,7 @@ public class Drive extends LinearOpMode
         completed = false;
         activate = false;
         init = false;
-        override = 0; // 0 for no override, 1 for lift override, 2 for total override
+        override = 1; // 0 for no override, 1 for lift override, 2 for total override
         direction = false;
 
         time = new ElapsedTime();
@@ -276,13 +275,13 @@ public class Drive extends LinearOpMode
          // TODO complete if you have time*/
 
         if ( (gamepad2.right_bumper || gamepad1.right_bumper) && (lift_position == Constants.liftHigh)
-                && (right_bumperOpen==true))
+                && (right_bumperOpen))
         {
             lift_position = Constants.liftIntake;// automatically go to the intake position(arm)
             right_bumperOpen = false;
         }
         if ( (gamepad2.right_bumper || gamepad1.right_bumper) && (lift_position == Constants.liftIntake)
-                && (right_bumperOpen==true))
+                && (right_bumperOpen))
         {
             lift_position = Constants.liftHigh;// automatically go to the highest ship hub position(arm)
             right_bumperOpen = false;
