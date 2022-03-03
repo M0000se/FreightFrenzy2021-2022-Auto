@@ -118,6 +118,26 @@ public class Drive extends LinearOpMode
 
         waitForStart();
 
+<<<<<<< HEAD
+=======
+        ElapsedTime time = new ElapsedTime();
+        boolean b_open=true;
+        boolean completed=false;
+        boolean activate=false;
+        boolean init=false;
+        int override = 0; // 0 for no override, 1 for lift override, 2 for total override
+        boolean direction = false;
+        boolean lift_complete = false;
+
+        double currentTime = time.time();
+        double dump_position=0;
+        double claw_position=0;
+        double lift_power=0;
+        double spinner_power=0;
+        boolean spinner_direction = false;
+        double delay = 0;
+        double mult=0.5;
+>>>>>>> 5a95f0b654434b479371a8bf06c26e13afe913cc
 
         if (opModeIsActive())
         {
@@ -129,6 +149,7 @@ public class Drive extends LinearOpMode
                 Horizontal = gamepad1.right_stick_x * gamepad1.right_stick_x * gamepad1.right_stick_x * 1 * mult;
                 Pivot = gamepad1.left_stick_x * gamepad1.left_stick_x * gamepad1.left_stick_x * 0.6*mult;
 
+<<<<<<< HEAD
                 led_pattern = 0;
                 if(gamepad1.left_trigger >= 0.1)
                 {
@@ -137,6 +158,10 @@ public class Drive extends LinearOpMode
                     led_pattern = 1;
                 }
                 else mult = 0.5;
+=======
+                if(gamepad1.left_bumper) mult = 1;
+                else mult = 0.5; // 50% speed
+>>>>>>> 5a95f0b654434b479371a8bf06c26e13afe913cc
 
                 // switch modes
 
@@ -168,8 +193,27 @@ public class Drive extends LinearOpMode
                 // crude implementation of automatic breaking spinner
                 if(gamepad1.left_bumper)
                 {
+<<<<<<< HEAD
                     spinner_power=1;
                     spinner_direction_toggle=1;
+=======
+                    //some noodlecode bs
+                    if(activate)
+                    {
+                        //telemetry.addData("direction",direction );
+                        //stop();
+                         //TODO: fixed
+                        if(direction==false) lift_complete = Lift.updatePosition(Constants.liftIntake, lift);
+                        if(direction==true)  lift_complete = Lift.updatePosition(Constants.liftHigh, lift);
+                        if(lift_complete)
+                        {
+                            dump_position=1;
+                            activate=false;
+                            if(direction==true)  dump_position=Constants.dumpMid;
+                            if(direction==false) dump_position=Constants.dumpLow; //TODO fix
+                        }
+                    }
+>>>>>>> 5a95f0b654434b479371a8bf06c26e13afe913cc
                 }
                 else
                 {
