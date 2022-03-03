@@ -59,13 +59,13 @@ public class test extends LinearOpMode //spaghetti code incoming sry
         DcMotor Spinner = hardwareMap.get(DcMotor.class, "Spinner");
         Servo Claw = hardwareMap.get(Servo.class, "Claw");
         AndroidSoundPool androidSoundPool = new AndroidSoundPool();
-        Claw.setPosition(1);
+
         Servo Dump = hardwareMap.get(Servo.class, "Dump");
         //lift.setDirection(DcMotorSimple.Direction.FORWARD);
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        Lift.runToPosition(Constants.liftLow, lift);
+        //Lift.runToPosition(Constants.liftLow, lift);
 
         /*while(opModeIsActive())
         {
@@ -73,7 +73,7 @@ public class test extends LinearOpMode //spaghetti code incoming sry
             telemetry.update();
         }*/
 
-
+        //Lift.runToPosition(Constants.LiftLow, lift);
 
 
         /*Pose2d startPose = new Pose2d(Constants.offset, 60, Math.toRadians(-90));
@@ -98,8 +98,37 @@ public class test extends LinearOpMode //spaghetti code incoming sry
         if(duckPose==1) Lift.runToPosition(Constants.liftMid, lift);
         if(duckPose==2) Lift.runToPosition(Constants.liftHigh, lift);*/
 
-        Dump.setPosition(-1.0);
-        Spinner.setPower(-0.8);
+       /*for(double i = -1.0; i < 1.0; i+=0.1)
+        {
+            Claw.setPosition(i);
+            telemetry.addData("servo:", i);
+            telemetry.update();
+            sleep(1000);
+        }*/
+
+
+        /*Claw.setPosition(0);
+        sleep(1000);
+        Claw.setPosition(1);
+        sleep(1000);
+        Claw.setPosition(0);*/
+
+        /*for(double i = -2.0; i < 2.0; i+=0.1)
+        {
+            Claw.setPosition(i);
+            sleep(1000);
+            telemetry.addData("servo:", i);
+            telemetry.update();
+        }*/
+
+        for(double i = 0; i < 1.0; i+=0.05)
+        {
+            Dump.setPosition(i);
+            sleep(1000);
+            telemetry.addData("servo:", i);
+            telemetry.update();
+        }
+
 
         /*TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(startPose)
                 .waitSeconds(Constants.startDelay)

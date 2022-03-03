@@ -23,8 +23,8 @@ import java.util.List;
 
 //TODO: Uhm, I just thought... we are kinda screwed if we dont see a duck.
 
-@Autonomous (name = "BLUE RIGHT")//STARTUP TIME, AFTER WE DROP THE BLOCK TIME, AND SPINNER POINT DELAY
-public class Blue_left extends LinearOpMode //spaghetti code incoming sry
+@Autonomous (name = "BLUE")//STARTUP TIME, AFTER WE DROP THE BLOCK TIME, AND SPINNER POINT DELAY
+public class Blue extends LinearOpMode //spaghetti code incoming sry
 {
     private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
     private static final String[] LABELS = {
@@ -39,7 +39,16 @@ public class Blue_left extends LinearOpMode //spaghetti code incoming sry
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
 
+    public Servo Claw;
+    public SampleMecanumDrive drive;
+    public DcMotor lift;
+    public DcMotor Spinner;
+    public Servo Dump;
 
+    TrajectorySequence Red;
+    TrajectorySequence Blue;
+
+    public int duckPose;
 
     @Override
     public void runOpMode() throws InterruptedException
@@ -47,27 +56,84 @@ public class Blue_left extends LinearOpMode //spaghetti code incoming sry
         /////////////////////////// INITIALISATION ////////////////////////////
         initVuforia();
         initTfod();
-
-        int duckPose = 0;
-        //duckPose = Webcam.getElementPosition(tfod, vuforia); // TODO check with the positions
+        initHardware();
+        initBlue();
+        initRed();
 
         //telemetry.addData("!!! Duc pose = ", duckPose);
         //telemetry.update();
 
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-        DcMotor lift = hardwareMap.get(DcMotorEx.class, "Lift");
-        DcMotor Spinner = hardwareMap.get(DcMotor.class, "Spinner");
-        Servo Claw = hardwareMap.get(Servo.class, "Claw");
+
+
+        /////////////////////////// AUTO ////////////////////////////
+
+        //set lift according to the duck location
+
+
+        telemetry.addData(">", "Press Play to start op mode");
+        telemetry.update();
+        if(isStopRequested()) return;
+        waitForStart();
+
+        Run();
+
+    }
+
+    private void Run()
+    {
+        Dump.setPosition(-1.0);
+        Spinner.setPower(-0.8);
+        if(duckPose==0) Lift.runToPosition(Constants.liftLow, lift);
+        if(duckPose==1) Lift.runToPosition(Constants.liftMid, lift);
+        if(duckPose==2) Lift.runToPosition(Constants.liftHigh, lift);
+
+        if(Constants.side == 0)drive.followTrajectorySequence(Red);
+        if(Constants.side == 1)drive.followTrajectorySequence(Blue);
+    }
+
+    private void initHardware()
+    {
+        drive = new SampleMecanumDrive(hardwareMap);
+        lift = hardwareMap.get(DcMotorEx.class, "Lift");
+        Spinner = hardwareMap.get(DcMotor.class, "Spinner");
+        Claw = hardwareMap.get(Servo.class, "Claw");
         AndroidSoundPool androidSoundPool = new AndroidSoundPool();
         Claw.setPosition(1);
-        Servo Dump = hardwareMap.get(Servo.class, "Dump");
+        Dump = hardwareMap.get(Servo.class, "Dump");
         lift.setDirection(DcMotorSimple.Direction.FORWARD);
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //drive
 
+        duckPose = 0;
+        duckPose = Webcam.getElementPosition(tfod, vuforia); // TODO check with the positions
+        //webcam
+    }
 
+    private void initRed()
+    {
+        Pose2d startPose =          new Pose2d(Constants.offset, -60, Math.toRadians(90));
+        Vector2d shippingHub =        new Vector2d(-12, -42);
+        //Vector2d midpoint = new Vector2d(-30, -42);
+        Pose2d spinner =            new Pose2d(-55, -60, Math.toRadians (90));
+        Pose2d warehouse_midpoint = new Pose2d(-40, -65, Math.toRadians (0));
+        Pose2d warehouse =          new Pose2d(40, -65, Math.toRadians (0));
 
+        TrajectorySequence Red = drive.trajectorySequenceBuilder(startPose)
+                .waitSeconds(Constants.startDelay)
+                .lineTo(shippingHub)//location of the red shipping hub
+                .addTemporalMarker(Constants.startDelay, () -> {Claw.setPosition(0.5);}) //servo dump
+                .waitSeconds(Constants.red_basic_shipHubDelay+Constants.shipHubDelay)
+                // shipping hub dump delay + additional delay if we wish
+                .lineToLinearHeading(spinner)
+                .waitSeconds(Constants.red_basic_spinDelay+Constants.spinDelay)
+                // carousel spinning delay + additional delay if we wish
+                .lineToLinearHeading(warehouse_midpoint)
+                .lineToLinearHeading(warehouse)
+                .build();
+    }
 
+    private void initBlue()
+    {
         Pose2d startPose = new Pose2d(Constants.offset, 60, Math.toRadians(-90));
         Vector2d shippingHub = new Vector2d(-12, 42);
         //Vector2d midpoint = new Vector2d(-30, -42);
@@ -79,21 +145,7 @@ public class Blue_left extends LinearOpMode //spaghetti code incoming sry
 
         drive.setPoseEstimate(startPose);
 
-        telemetry.addData(">", "Press Play to start op mode");
-        telemetry.update();
-        waitForStart();
-
-        /////////////////////////// AUTO ////////////////////////////
-
-        //set lift according to the duck location
-        if(duckPose==0) Lift.runToPosition(Constants.liftLow, lift);
-        if(duckPose==1) Lift.runToPosition(Constants.liftMid, lift);
-        if(duckPose==2) Lift.runToPosition(Constants.liftHigh, lift);
-
-        Dump.setPosition(-1.0);
-        Spinner.setPower(-0.8);
-
-        TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(startPose)
+        TrajectorySequence Blue = drive.trajectorySequenceBuilder(startPose)
                 .waitSeconds(Constants.startDelay)
                 .lineTo(shippingHub)//location of the red shipping hub
                 .addTemporalMarker(Constants.startDelay, () -> {Claw.setPosition(0.5);}) //servo dump
@@ -106,13 +158,10 @@ public class Blue_left extends LinearOpMode //spaghetti code incoming sry
                 .splineToConstantHeading(warehouse_midpoint, 0)
                 .lineToLinearHeading(warehouse)
                 .build();
-
-        if(isStopRequested()) return;
-
-        drive.followTrajectorySequence(trajSeq);
     }
 
-    private void initVuforia() {
+    private void initVuforia()
+    {
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          */

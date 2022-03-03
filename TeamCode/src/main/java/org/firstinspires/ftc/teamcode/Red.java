@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -22,8 +23,9 @@ import java.util.List;
 
 //TODO: Uhm, I just thought... we are kinda done if we dont see a duck.
 
+@Disabled
 @Autonomous (name = "RED RIGHT")//STARTUP TIME, AFTER WE DROP THE BLOCK TIME, AND SPINNER POINT DELAY
-public class Red_right extends LinearOpMode //spaghetti code incoming sry
+public class Red extends LinearOpMode //spaghetti code incoming sry
 {
 
     private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
