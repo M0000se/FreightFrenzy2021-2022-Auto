@@ -6,14 +6,14 @@ public class Lift // pid controller.
 {
     static boolean updatePosition (int pos, DcMotor motor) // iterative
     {
-         if(motor.getCurrentPosition()<(pos-Constants.p_accuracy)) 
+         if(motor.getCurrentPosition()<(pos-Constants.p_error)) 
          {
-             motor.setPower(Math.min(((pos-Constants.p_accuracy)-motor.getCurrentPosition())*Constants.p,1));
+             motor.setPower(Math.min(((pos-Constants.p_error)-motor.getCurrentPosition())*Constants.p,1));
              return false;
          } 
-         if(motor.getCurrentPosition()>(pos+Constants.p_accuracy))
+         if(motor.getCurrentPosition()>(pos+Constants.p_error))
          {
-             motor.setPower(Math.max(((pos+Constants.p_accuracy)-motor.getCurrentPosition())*Constants.p,-1));
+             motor.setPower(Math.max(((pos+Constants.p_error)-motor.getCurrentPosition())*Constants.p,-1));
              return false;
          }
          return true; //we are within the accuracy 
@@ -23,13 +23,13 @@ public class Lift // pid controller.
     {
         while(true)
         {
-            if(motor.getCurrentPosition()<(pos-Constants.p_accuracy))
+            if(motor.getCurrentPosition()<(pos-Constants.p_error))
             {
-                motor.setPower(Math.min(((pos-Constants.p_accuracy)-motor.getCurrentPosition())*Constants.p,1));
+                motor.setPower(Math.min(((pos-Constants.p_error)-motor.getCurrentPosition())*Constants.p,1));
             }
-            else if(motor.getCurrentPosition()>(pos+Constants.p_accuracy))
+            else if(motor.getCurrentPosition()>(pos+Constants.p_error))
             {
-                motor.setPower(Math.max(((pos+Constants.p_accuracy)-motor.getCurrentPosition())*Constants.p,-1));
+                motor.setPower(Math.max(((pos+Constants.p_error)-motor.getCurrentPosition())*Constants.p,-1));
             }
             else return; //we are within the accuracy
         }

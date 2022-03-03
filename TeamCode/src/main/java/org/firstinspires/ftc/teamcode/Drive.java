@@ -29,6 +29,7 @@ public class Drive extends LinearOpMode
     private Servo Dump;
     private RevBlinkinLedDriver led;
     private ColorSensor color_sensor;
+    private ColorSensor color_sensor2;
 
     private boolean backOpen = true;
     private boolean b_open = true;
@@ -98,6 +99,7 @@ public class Drive extends LinearOpMode
         led = hardwareMap.get(RevBlinkinLedDriver.class, "led");
 
         color_sensor = hardwareMap.colorSensor.get("color");
+        color_sensor2 = hardwareMap.colorSensor.get("color2");
 
         lift.setDirection(DcMotorSimple.Direction.FORWARD);
         RightFront.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -227,9 +229,9 @@ public class Drive extends LinearOpMode
                 Dump.setPosition(dump_position);
                 Claw.setPosition(claw_position);
                 Spinner.setPower(spinner_power);
-                if(led_pattern==0) led.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+                if(led_pattern==0) led.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
                 if(led_pattern==1) led.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE);
-                if(led_pattern==2) led.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_RED);
+                if(led_pattern==2) led.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);
 
                 /*if(gamepad1.left_bumper || gamepad2.left_bumper) Spinner.setDirection(DcMotorSimple.Direction.REVERSE);
                 else                   Spinner.setDirection(DcMotorSimple.Direction.FORWARD);*/
@@ -274,7 +276,7 @@ public class Drive extends LinearOpMode
 
          // TODO complete if you have time*/
 
-        if ( (gamepad2.right_bumper || gamepad1.right_bumper) && (lift_position == Constants.liftHigh)
+        if ( (gamepad2.right_bumper || gamepad1.right_bumper) && (lift_position != Constants.liftIntake)
                 && (right_bumperOpen))
         {
             lift_position = Constants.liftIntake;// automatically go to the intake position(arm)
@@ -307,11 +309,12 @@ public class Drive extends LinearOpMode
 
         if(gamepad1.dpad_up)dump_position = Constants.dumpFold; //fold up if we press dpadup
 
-        if ((color_sensor.red()>color_sensor.blue()*2 && color_sensor.green()>color_sensor.blue()*2)) // sees red
+        if (Color_sensor.see_freight(color_sensor) || Color_sensor.see_freight(color_sensor2)) // see freight?
         {
-            led_pattern=2;
+            led_pattern = 2;
             telemetry.addData("Done", "Done");
         }
+
 
         telemetry.addData("lift:", lift.getCurrentPosition());
     }
@@ -322,8 +325,8 @@ public class Drive extends LinearOpMode
         {
             lift_position = Constants.liftIntake;
 
-            claw_position=0;
-            dump_position=Constants.dumpFold; // start
+            claw_position = 0;
+            dump_position = Constants.dumpFold; // start
         }
 
         if(Lift.updatePosition(lift_position, lift)==true
