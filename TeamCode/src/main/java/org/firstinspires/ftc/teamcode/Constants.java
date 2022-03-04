@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 public class Constants
 {
-
+    ///////////////////////////////////ROBOT AUTO////////////////////////////////
     //Blue/Red variables
     public static int offset = 12; //TODO 0 for left, change for right  -35 for left, 12 for right
     public static int side = 0;
@@ -10,12 +10,26 @@ public class Constants
     public static double shipHubDelay = 0.0;
     public static double spinDelay = 0.0;
 
+    //Red-specific auto variables
+    public static double red_basic_shipHubDelay = 0.1; // constant minimal time to complete a corresponding marker
+    public static double red_basic_spinDelay = 6.0;
+    public static double freight_red_basic_shipHubDelay = 6.0;
+
+    //Blue-specific auto variables
+    public static double blue_basic_shipHubDelay = 0.1; // constant minimal time to complete a corresponding marker
+    public static double blue_basic_spinDelay = 6.0;
+    public static double freight_blue_basic_shipHubDelay = 6.0;
+
     //for freight collection during auto
     public static double autoTimeLimit=30; // in seconds
-    public static double run_time = 5;
+    public static double run_time_red = 7;
+    public static double run_time_blue = 10;
     public static boolean freight = true;
 
 
+
+
+    ///////////////////////////////////ROBOT SUBSYSTEMS////////////////////////////////
     //Webcam
     public static int x_center = 200; //middle of the webcam view
     public static int center_accuracy = 70;
@@ -34,14 +48,6 @@ public class Constants
     public static double dumpMid = 0.72;
     public static double dumpHigh = 0.55;    //position value for the high ship hub position of the dump
     public static double dumpFold = 0.5;      //position value for the folded position of the dump (NOT THE COMPLETELY FOLDED LIKE HOW WE START)
-
-    //Red-specific variables
-    public static double red_basic_shipHubDelay = 0.1; // constant minimal time to complete a corresponding marker
-    public static double red_basic_spinDelay = 6.0;
-
-    //Blue-specific variables
-    public static double blue_basic_shipHubDelay = 0.1; // constant minimal time to complete a corresponding marker
-    public static double blue_basic_spinDelay = 6.0;
 
     //color sensor
     public static double color_error = 50; // max allowed color sensor rgb error
