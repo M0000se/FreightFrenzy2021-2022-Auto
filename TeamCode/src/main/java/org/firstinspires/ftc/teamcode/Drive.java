@@ -109,8 +109,7 @@ public class Drive extends LinearOpMode
         LeftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lift_position=Constants.liftIntake; //set at the highest
-        Dump.setPosition(Constants.dumpStraight);
+        lift_position=Constants.liftHigh; //set at the highest
         //lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Spinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         Claw.setDirection(Servo.Direction.REVERSE);
@@ -277,7 +276,9 @@ public class Drive extends LinearOpMode
 
          // TODO complete if you have time*/
 
-        if ( (gamepad2.right_bumper || gamepad1.right_bumper) || (gamepad2.y || gamepad1.y) && (lift_position == Constants.liftHigh)
+        if((gamepad2.y || gamepad1.y))lift_position = Constants.liftHigh;
+
+        if ( (gamepad2.right_bumper || gamepad1.right_bumper) && (lift_position == Constants.liftHigh)
                 && (right_bumperOpen))
         {
             lift_position = Constants.liftIntake;// automatically go to the intake position(arm)
@@ -304,7 +305,6 @@ public class Drive extends LinearOpMode
             if (lift_position == Constants.liftMid) dump_position = Constants.dumpMid;
             if (lift_position == Constants.liftHigh) dump_position = Constants.dumpHigh;
             if (lift_position == Constants.liftIntake) dump_position = Constants.dumpStraight;
-
             //finish
         }
 

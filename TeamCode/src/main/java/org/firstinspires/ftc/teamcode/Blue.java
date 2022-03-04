@@ -74,6 +74,9 @@ public class Blue extends LinearOpMode //spaghetti code incoming sry
         initBlue_basic();
         initRed_basic();
 
+        telemetry.addData(">", "Press Play to start op mode");
+        telemetry.update();
+        sleep(1500);
 
         //telemetry.addData("!!! Duc pose = ", duckPose);
         //telemetry.update();
@@ -95,8 +98,8 @@ public class Blue extends LinearOpMode //spaghetti code incoming sry
 
     private void Run()
     {
-        ElapsedTime time = new ElapsedTime();
-        double current_time=time.time(); // in seconds by default
+        ElapsedTime Time = new ElapsedTime();
+        double current_time=Time.time(); // in seconds by default
 
         Spinner.setPower(-0.8); // TODO change for red
         if(duckPose==0) //when duck is at the position leftest (in case we take the duck's position)
@@ -131,7 +134,7 @@ public class Blue extends LinearOpMode //spaghetti code incoming sry
                     {
                         if(isStopRequested()) return;
 
-                        current_time = time.time(); //OPERATION: get current time
+                        current_time = Time.time(); //OPERATION: get current time
                         enough_time = ((Constants.autoTimeLimit-current_time)>Constants.run_time_red); //OPERATION: if we have enough time
                         see_freight = (Color_sensor.see_freight(color_sensor) || Color_sensor.see_freight(color_sensor2)); //if either one sees freight
 
@@ -176,7 +179,7 @@ public class Blue extends LinearOpMode //spaghetti code incoming sry
 
 
 
-        if(Constants.side == 0) //blue
+        if(Constants.side == 1) //blue
         {
             drive.followTrajectorySequence(Blue); //OPERATION: blue goes to collect the preset freight, spin, and go to the warehouse
             //drive.followTrajectorySequence(Blue_barrier); //OPERATION: blue goes to collect the preset freight, spin, and go to the warehouse
@@ -192,7 +195,7 @@ public class Blue extends LinearOpMode //spaghetti code incoming sry
                     {
                         if(isStopRequested()) return;
 
-                        current_time = time.time(); //OPERATION: get current time
+                        current_time = Time.time(); //OPERATION: get current time
                         enough_time = ((Constants.autoTimeLimit-current_time)>Constants.run_time_blue); //OPERATION: if we have enough time
                         see_freight = (Color_sensor.see_freight(color_sensor) || Color_sensor.see_freight(color_sensor2)); //if either one sees freight
 
@@ -246,7 +249,7 @@ public class Blue extends LinearOpMode //spaghetti code incoming sry
         Dump = hardwareMap.get(Servo.class, "Dump");
         lift.setDirection(DcMotorSimple.Direction.FORWARD);
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //drive
+        //lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //todo: god fucking damnit disable it
         color_sensor  = hardwareMap.colorSensor.get("color1");
         color_sensor2 = hardwareMap.colorSensor.get("color2");
 

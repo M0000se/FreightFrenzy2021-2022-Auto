@@ -6,11 +6,11 @@ public class Lift // pid controller.
 {
     static boolean updatePosition (int pos, DcMotor motor) // iterative
     {
-         if(motor.getCurrentPosition()<(pos-Constants.p_error)) 
+         if(motor.getCurrentPosition()<(pos-Constants.p_error))
          {
              motor.setPower(Math.min(((pos-Constants.p_error)-motor.getCurrentPosition())*Constants.p,1));
              return false;
-         } 
+         }
          if(motor.getCurrentPosition()>(pos+Constants.p_error))
          {
              motor.setPower(Math.max(((pos+Constants.p_error)-motor.getCurrentPosition())*Constants.p,-1));
@@ -31,7 +31,8 @@ public class Lift // pid controller.
             {
                 motor.setPower(Math.max(((pos+Constants.p_error)-motor.getCurrentPosition())*Constants.p,-1));
             }
-            else return; //we are within the accuracy
+            else return;
+             //we are within the accuracy
         }
     }
 }
