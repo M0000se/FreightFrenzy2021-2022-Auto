@@ -24,7 +24,7 @@ public class Constants
     public static double autoTimeLimit=30; // in seconds
     public static double run_time_red = 7;
     public static double run_time_blue = 10;
-    public static boolean freight = true;
+    public static boolean freight = false;
 
 
 

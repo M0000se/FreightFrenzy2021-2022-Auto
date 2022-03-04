@@ -98,7 +98,7 @@ public class Drive extends LinearOpMode
 
         led = hardwareMap.get(RevBlinkinLedDriver.class, "led");
 
-        color_sensor = hardwareMap.colorSensor.get("color");
+        color_sensor = hardwareMap.colorSensor.get("color1");
         color_sensor2 = hardwareMap.colorSensor.get("color2");
 
         lift.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -110,6 +110,7 @@ public class Drive extends LinearOpMode
         RightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lift_position=Constants.liftIntake; //set at the highest
+        Dump.setPosition(Constants.dumpStraight);
         //lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Spinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         Claw.setDirection(Servo.Direction.REVERSE);
@@ -276,7 +277,7 @@ public class Drive extends LinearOpMode
 
          // TODO complete if you have time*/
 
-        if ( (gamepad2.right_bumper || gamepad1.right_bumper) && (lift_position != Constants.liftIntake)
+        if ( (gamepad2.right_bumper || gamepad1.right_bumper) || (gamepad2.y || gamepad1.y) && (lift_position == Constants.liftHigh)
                 && (right_bumperOpen))
         {
             lift_position = Constants.liftIntake;// automatically go to the intake position(arm)

@@ -247,8 +247,8 @@ public class Blue extends LinearOpMode //spaghetti code incoming sry
         lift.setDirection(DcMotorSimple.Direction.FORWARD);
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); //drive
-        color_sensor  = hardwareMap.colorSensor.get("color");
-        color_sensor2 = hardwareMap.colorSensor.get("color1");
+        color_sensor  = hardwareMap.colorSensor.get("color1");
+        color_sensor2 = hardwareMap.colorSensor.get("color2");
 
         duckPose = 0;
         //duckPose = Webcam.getElementPosition(tfod, vuforia); // TODO check with the positions
