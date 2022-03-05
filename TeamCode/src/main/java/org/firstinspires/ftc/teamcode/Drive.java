@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -241,6 +243,7 @@ public class Drive extends LinearOpMode
                 else telemetry.addData("Override:", override);
                 //telemetry.addData("override: False", override);
                 telemetry.addData("TIME:", time.time());
+
                 telemetry.update();
             }
         }
@@ -264,6 +267,7 @@ public class Drive extends LinearOpMode
 
 
         claw_position = Math.max(gamepad2.right_trigger, gamepad1.right_trigger);
+        //if(claw_position < 0.42) claw_position=0.42;
         // Operate claw with right trigger
 
         lift.setPower(lift_power);
@@ -272,6 +276,7 @@ public class Drive extends LinearOpMode
     public void AutoSpecific()
     {
         claw_position = Math.max(gamepad2.right_trigger, gamepad1.right_trigger);
+        if(claw_position < 0.44) claw_position=0.44;
         // Operate claw with right trigger
 
          // TODO complete if you have time*/

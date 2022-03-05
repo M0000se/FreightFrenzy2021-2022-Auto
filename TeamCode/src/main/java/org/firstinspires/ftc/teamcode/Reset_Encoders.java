@@ -73,7 +73,7 @@ public class Reset_Encoders extends LinearOpMode //spaghetti code incoming sry
                 else if (gamepad1.dpad_up) lift.setPower(1);
                 else lift.setPower(0);
                 if (gamepad1.a) {
-                    Dump.setPosition(0);
+                    //Dump.setPosition(0.5);
                     lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     telemetry.addLine("encoders reset");
                     telemetry.update();

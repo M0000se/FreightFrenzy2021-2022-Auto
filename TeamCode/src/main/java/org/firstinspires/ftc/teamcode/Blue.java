@@ -99,23 +99,26 @@ public class Blue extends LinearOpMode //spaghetti code incoming sry
     private void Run()
     {
         ElapsedTime Time = new ElapsedTime();
-        double current_time=Time.time(); // in seconds by default
+        double current_time = Time.time(); // in seconds by default
 
         Spinner.setPower(-0.8); // TODO change for red
         if(duckPose==0) //when duck is at the position leftest (in case we take the duck's position)
         {
-            Lift.runToPosition(Constants.liftLow, lift); // 1.goes to the lowest position
             Dump.setPosition(Constants.dumpLow); //2. set the dump to the lowest position
+            sleep(1000);
+            Lift.runToPosition(Constants.liftLow, lift); // 1.goes to the lowest position
         }
         if(duckPose==1) //when duck is at the position middle (in case we take the duck's position)
         {
-            Lift.runToPosition(Constants.liftMid, lift);
             Dump.setPosition(Constants.dumpMid);
+            sleep(1000);
+            Lift.runToPosition(Constants.liftMid, lift);
         }
         if(duckPose==2) //when duck is at the position rightest (in case we take the duck's position)
         {
-            Lift.runToPosition(Constants.liftHigh, lift);
             Dump.setPosition(Constants.dumpHigh);
+            sleep(1000);
+            Lift.runToPosition(Constants.liftHigh, lift);
         }
 
         if(Constants.side == 0) //red

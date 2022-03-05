@@ -117,7 +117,32 @@ public class test extends LinearOpMode
 
         if (opModeIsActive())
         {
+            while(opModeIsActive())
+            {
 
+                double scalar = color_sensor.red() / 255;
+                double sensor_scaled_r = color_sensor.red() / scalar;
+                double sensor_scaled_g = color_sensor.green() / scalar;
+                double sensor_scaled_b = color_sensor.blue() / scalar;
+// 350
+                //550
+                //500
+
+                //300
+                //400
+                //200
+
+                //270
+                //320
+                //100
+
+
+
+                telemetry.addData("rgb R", sensor_scaled_r);
+                telemetry.addData("rgb G", sensor_scaled_g);
+                telemetry.addData("rgb B", sensor_scaled_b);
+                telemetry.update();
+            }
         }
     }
 }
