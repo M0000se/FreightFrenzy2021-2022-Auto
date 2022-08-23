@@ -1,10 +1,7 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.control;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
@@ -48,8 +45,8 @@ public class Webcam
                         // check label to see if the camera now sees a Duck
                         if (recognition.getLabel().equals("Duck")) {            //  ** ADDED **
                             isDuckDetected = true;
-                            if (recognition.getLeft() > Constants.x_center+Constants.center_accuracy) return 2;
-                            else if (recognition.getLeft() < Constants.x_center-Constants.center_accuracy) return 0;
+                            if (recognition.getLeft() > Storage.x_center+ Storage.center_accuracy) return 2;
+                            else if (recognition.getLeft() < Storage.x_center- Storage.center_accuracy) return 0;
                             else return 1; //TODO: test*/
 
                         } else isDuckDetected = false;

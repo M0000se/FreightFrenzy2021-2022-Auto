@@ -1,6 +1,5 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.control;
 
-import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -14,12 +13,9 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.android.AndroidSoundPool;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
-
-import java.util.List;
 
 //TODO: Uhm, I just thought... we are kinda done if we dont see a duck.
 
@@ -95,7 +91,7 @@ public class Red extends LinearOpMode //spaghetti code incoming sry
         Dump = hardwareMap.get(Servo.class, "Dump");
         Lift.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        Pose2d startPose =          new Pose2d(Constants.offset, -60, Math.toRadians(90));
+        Pose2d startPose =          new Pose2d(Storage.offset, -60, Math.toRadians(90));
         Vector2d shippingHub =        new Vector2d(-12, -42);
         //Vector2d midpoint = new Vector2d(-30, -42);
         Pose2d spinner =            new Pose2d(-55, -60, Math.toRadians (90));
@@ -112,21 +108,21 @@ public class Red extends LinearOpMode //spaghetti code incoming sry
         ///////////////////////////////// AUTO ///////////////////////////////////////
 
         //set lift according to the duck location
-        if(duckPose==0) Lift.setTargetPosition(Constants.liftLow);
-        if(duckPose==1) Lift.setTargetPosition(Constants.liftMid);
-        if(duckPose==2) Lift.setTargetPosition(Constants.liftHigh);
+        if(duckPose==0) Lift.setTargetPosition(Storage.liftLow);
+        if(duckPose==1) Lift.setTargetPosition(Storage.liftMid);
+        if(duckPose==2) Lift.setTargetPosition(Storage.liftHigh);
 
         Dump.setPosition(-1.0);
         Spinner.setPower(-0.8);
 
         TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(startPose)
-                .waitSeconds(Constants.startDelay)
+                .waitSeconds(Storage.startDelay)
                 .lineTo(shippingHub)//location of the red shipping hub
-                .addTemporalMarker(Constants.startDelay, () -> {Claw.setPosition(0.5);}) //servo dump
-                .waitSeconds(Constants.red_basic_shipHubDelay+Constants.shipHubDelay)
+                .addTemporalMarker(Storage.startDelay, () -> {Claw.setPosition(0.5);}) //servo dump
+                .waitSeconds(Storage.red_basic_shipHubDelay+ Storage.shipHubDelay)
                 // shipping hub dump delay + additional delay if we wish
                 .lineToLinearHeading(spinner)
-                .waitSeconds(Constants.red_basic_spinDelay+Constants.spinDelay)
+                .waitSeconds(Storage.red_basic_spinDelay+ Storage.spinDelay)
                 // carousel spinning delay + additional delay if we wish
                 .lineToLinearHeading(warehouse_midpoint)
                 .lineToLinearHeading(warehouse)

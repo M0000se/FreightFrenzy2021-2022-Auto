@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.control;
 
 import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
@@ -6,8 +6,6 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.robotcore.external.android.AndroidTextToSpeech;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -108,7 +106,7 @@ public class test extends LinearOpMode
         LeftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lift_position=Constants.liftHigh; //set at the highest
+        lift_position= Storage.liftHigh; //set at the highest
         //lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Spinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         Claw.setDirection(Servo.Direction.REVERSE);

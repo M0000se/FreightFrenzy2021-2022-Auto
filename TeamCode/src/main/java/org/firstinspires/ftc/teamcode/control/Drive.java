@@ -1,6 +1,4 @@
-package org.firstinspires.ftc.teamcode;
-
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+package org.firstinspires.ftc.teamcode.control;
 
 import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
@@ -9,7 +7,6 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.robotcore.external.android.AndroidTextToSpeech;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -111,7 +108,7 @@ public class Drive extends LinearOpMode
         LeftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         RightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        lift_position=Constants.liftHigh; //set at the highest
+        lift_position= Storage.liftHigh; //set at the highest
         //lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         Spinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         Claw.setDirection(Servo.Direction.REVERSE);
@@ -258,8 +255,8 @@ public class Drive extends LinearOpMode
 
         //lift
 
-        if (gamepad2.right_bumper || gamepad1.right_bumper) dump_position = Constants.dumpStraight;
-        else dump_position = Constants.dumpHigh;
+        if (gamepad2.right_bumper || gamepad1.right_bumper) dump_position = Storage.dumpStraight;
+        else dump_position = Storage.dumpHigh;
 
         //if (gamepad2.start || gamepad1.start) lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // reset encoder
 
@@ -281,39 +278,39 @@ public class Drive extends LinearOpMode
 
          // TODO complete if you have time*/
 
-        if((gamepad2.y || gamepad1.y))lift_position = Constants.liftHigh;
+        if((gamepad2.y || gamepad1.y))lift_position = Storage.liftHigh;
 
-        if ( (gamepad2.right_bumper || gamepad1.right_bumper) && (lift_position == Constants.liftHigh)
+        if ( (gamepad2.right_bumper || gamepad1.right_bumper) && (lift_position == Storage.liftHigh)
                 && (right_bumperOpen))
         {
-            lift_position = Constants.liftIntake;// automatically go to the intake position(arm)
+            lift_position = Storage.liftIntake;// automatically go to the intake position(arm)
             right_bumperOpen = false;
         }
-        if ( (gamepad2.right_bumper || gamepad1.right_bumper) && (lift_position == Constants.liftIntake)
+        if ( (gamepad2.right_bumper || gamepad1.right_bumper) && (lift_position == Storage.liftIntake)
                 && (right_bumperOpen))
         {
-            lift_position = Constants.liftHigh;// automatically go to the highest ship hub position(arm)
+            lift_position = Storage.liftHigh;// automatically go to the highest ship hub position(arm)
             right_bumperOpen = false;
         }
         if(!(gamepad1.right_bumper || gamepad2.right_bumper)) right_bumperOpen = true;// TODO: my life...
 
-        if (gamepad2.x || gamepad1.x) lift_position = Constants.liftMid;// automatically go to the middle ship hub position(arm)
-        if (gamepad2.a || gamepad1.a) lift_position = Constants.liftLow;// automatically go to the low ship hub position(arm)
+        if (gamepad2.x || gamepad1.x) lift_position = Storage.liftMid;// automatically go to the middle ship hub position(arm)
+        if (gamepad2.a || gamepad1.a) lift_position = Storage.liftLow;// automatically go to the low ship hub position(arm)
 
         telemetry.addData("!!!Lift Position:", lift_position);
-        telemetry.addData("Lift should be to go down:", (lift_position == Constants.liftHigh));
-        telemetry.addData("Lift should be to go up:", (lift_position == Constants.liftIntake));
+        telemetry.addData("Lift should be to go down:", (lift_position == Storage.liftHigh));
+        telemetry.addData("Lift should be to go up:", (lift_position == Storage.liftIntake));
         telemetry.addData("gamepad1.right_bumper", gamepad1.right_bumper);
         if (Lift.updatePosition(lift_position, lift) == true) // middle
         {
-            if (lift_position == Constants.liftLow) dump_position = Constants.dumpLow;
-            if (lift_position == Constants.liftMid) dump_position = Constants.dumpMid;
-            if (lift_position == Constants.liftHigh) dump_position = Constants.dumpHigh;
-            if (lift_position == Constants.liftIntake) dump_position = Constants.dumpStraight;
+            if (lift_position == Storage.liftLow) dump_position = Storage.dumpLow;
+            if (lift_position == Storage.liftMid) dump_position = Storage.dumpMid;
+            if (lift_position == Storage.liftHigh) dump_position = Storage.dumpHigh;
+            if (lift_position == Storage.liftIntake) dump_position = Storage.dumpStraight;
             //finish
         }
 
-        if(gamepad1.dpad_up)dump_position = Constants.dumpFold; //fold up if we press dpadup
+        if(gamepad1.dpad_up)dump_position = Storage.dumpFold; //fold up if we press dpadup
 
         if (Color_sensor.see_freight(color_sensor) || Color_sensor.see_freight(color_sensor2)) // see freight?
         {
@@ -329,27 +326,27 @@ public class Drive extends LinearOpMode
     {
         if(gamepad1.a) // automatically go to the intake position(arm)
         {
-            lift_position = Constants.liftIntake;
+            lift_position = Storage.liftIntake;
 
             claw_position = 0;
-            dump_position = Constants.dumpFold; // start
+            dump_position = Storage.dumpFold; // start
         }
 
         if(Lift.updatePosition(lift_position, lift)==true
-                && lift_position == Constants.liftIntake)
+                && lift_position == Storage.liftIntake)
         {
-            dump_position=Constants.dumpStraight;
-            dump_position=Constants.dumpStraight;
-            dump_position=Constants.dumpHigh;
-            if(lift_position == Constants.liftIntake) dump_position=Constants.dumpStraight;
+            dump_position= Storage.dumpStraight;
+            dump_position= Storage.dumpStraight;
+            dump_position= Storage.dumpHigh;
+            if(lift_position == Storage.liftIntake) dump_position= Storage.dumpStraight;
         }
         if((color_sensor.red()>color_sensor.blue()*2 && color_sensor.green()>color_sensor.blue()*2))
         //detects orange cube and it at the intake position
         {
-            lift_position = Constants.liftHigh; //TODO check
+            lift_position = Storage.liftHigh; //TODO check
 
             claw_position=0;
-            dump_position=Constants.dumpFold; // start
+            dump_position= Storage.dumpFold; // start
 
 
             //finish

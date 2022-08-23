@@ -1,6 +1,4 @@
-package org.firstinspires.ftc.teamcode;
-
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+package org.firstinspires.ftc.teamcode.control;
 
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
@@ -17,11 +15,11 @@ public class Color_sensor
         double sensor_scaled_b = color_sensor.blue() / scalar;
 
         //checks
-        if(!((r+Constants.color_error)>sensor_scaled_r) && (sensor_scaled_r>(r-Constants.color_error)))
+        if(!((r+ Storage.color_error)>sensor_scaled_r) && (sensor_scaled_r>(r- Storage.color_error)))
             return false;
-        if(!((g+Constants.color_error)>sensor_scaled_g) && (sensor_scaled_g>(g-Constants.color_error)))
+        if(!((g+ Storage.color_error)>sensor_scaled_g) && (sensor_scaled_g>(g- Storage.color_error)))
             return false;
-        if(!((b+Constants.color_error)>sensor_scaled_b) && (sensor_scaled_b>(b-Constants.color_error)))
+        if(!((b+ Storage.color_error)>sensor_scaled_b) && (sensor_scaled_b>(b- Storage.color_error)))
             return false;
 
         // it does indeed, see the color
@@ -40,11 +38,11 @@ public class Color_sensor
 
 
         //checks
-        if(!((r+Constants.color_error)>sensor_scaled_r) && (sensor_scaled_r>(r-Constants.color_error)))
+        if(!((r+ Storage.color_error)>sensor_scaled_r) && (sensor_scaled_r>(r- Storage.color_error)))
             return false;
-        if(!((g+Constants.color_error)>sensor_scaled_g) && (sensor_scaled_g>(g-Constants.color_error)))
+        if(!((g+ Storage.color_error)>sensor_scaled_g) && (sensor_scaled_g>(g- Storage.color_error)))
             return false;
-        if(!((b+Constants.color_error)>sensor_scaled_b) && (sensor_scaled_b>(b-Constants.color_error)))
+        if(!((b+ Storage.color_error)>sensor_scaled_b) && (sensor_scaled_b>(b- Storage.color_error)))
             return false;
 
         // it does indeed, see the color
