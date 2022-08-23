@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.control;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
 //================================================================================
-// Dynamic shared variables
+// Dynamic shared variables/ Allows for quick access to everything during competitions
 //================================================================================
 
 public class Storage
@@ -14,7 +14,7 @@ public class Storage
     //================================================================================
     // Auto variables
     //================================================================================
-    public static Pose2d currentPose = new Pose2d();
+
 
     //================================================================================
     // Red/Blue variables

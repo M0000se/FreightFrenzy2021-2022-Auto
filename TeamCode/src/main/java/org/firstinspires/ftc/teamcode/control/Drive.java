@@ -85,16 +85,6 @@ public class Drive extends LinearOpMode
         delay = 0;
         mult=0.5;
 
-        lift = hardwareMap.get(DcMotorEx.class, "Lift");
-        RightFront = hardwareMap.get(DcMotor.class, "RightFront");
-        RightRear = hardwareMap.get(DcMotor.class, "RightRear");
-        LeftRear = hardwareMap.get(DcMotor.class, "LeftRear");
-        LeftFront = hardwareMap.get(DcMotor.class, "LeftFront");
-        Spinner = hardwareMap.get(DcMotor.class, "Spinner");
-        Claw = hardwareMap.get(Servo.class, "Claw");
-        androidSoundPool = new AndroidSoundPool();
-        Dump = hardwareMap.get(Servo.class, "Dump");
-
         led = hardwareMap.get(RevBlinkinLedDriver.class, "led");
 
         color_sensor = hardwareMap.colorSensor.get("color1");
