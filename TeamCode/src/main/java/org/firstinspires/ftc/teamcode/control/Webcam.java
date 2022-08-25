@@ -5,12 +5,13 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 
 import java.util.List;
 
 public class Webcam
 {
-    static public int getElementPosition (TFObjectDetector tfod, VuforiaLocalizer vuforia)
+    static public int getElementPosition (SampleMecanumDrive drive)
     {
         if (tfod != null) {
             tfod.activate();

@@ -42,12 +42,7 @@ public class Storage
     public static double autoTimeLimit = 30; // in seconds
     public static double run_time_red = 7;
     public static double run_time_blue = 10;
-    public static boolean freight = false;
 
-    ///////////////////////////////////ROBOT SUBSYSTEMS////////////////////////////////
-    //Webcam
-    public static int x_center = 200; //middle of the webcam view
-    public static int center_accuracy = 70;
 
 
 }

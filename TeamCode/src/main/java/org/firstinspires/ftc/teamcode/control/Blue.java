@@ -27,7 +27,7 @@ public class Blue extends LinearOpMode
     SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
     TrajectorySequence Blue;
-    Robot.currentPose=// set current position
+    // set current position
 
     @Override
     public void runOpMode() throws InterruptedException
@@ -55,7 +55,7 @@ public class Blue extends LinearOpMode
             {
                 while(opModeIsActive()) // one cycle of autonomous freight collection
                 {
-                    Lift.runToPosition(Storage.liftIntake, lift); //OPERATION: lift goes to the intake position when it's in the warehouse
+                    MotorPidControl.runToPosition(Storage.liftIntake, lift); //OPERATION: lift goes to the intake position when it's in the warehouse
                     int x_value = 0;
                     boolean see_freight = false;
                     boolean enough_time = true;
@@ -82,13 +82,13 @@ public class Blue extends LinearOpMode
                     {
                         initBlue_return(current_position);
                         drive.followTrajectorySequence(Blue_return);
-                        Lift.runToPosition(Storage.liftIntake, lift);
+                        MotorPidControl.runToPosition(Storage.liftIntake, lift);
                         return;
                     }
                     else if(see_freight)
                     {
                         Claw.setPosition(0); // open claw
-                        Lift.runToPosition(Storage.liftHigh, lift); // move to the highest position
+                        MotorPidControl.runToPosition(Storage.liftHigh, lift); // move to the highest position
                         Dump.setPosition(Storage.dumpHigh); // move to the high position
                         initBlue_freight(current_position); // move to the shipping hub and back
                         drive.followTrajectorySequence(Blue_freight);
@@ -118,7 +118,7 @@ public class Blue extends LinearOpMode
         lift.setDirection(DcMotorSimple.Direction.FORWARD);
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        color_sensor  = hardwareMap.colorSensor.get("color1");
+
         color_sensor2 = hardwareMap.colorSensor.get("color2");
 
         duckPose = 0;

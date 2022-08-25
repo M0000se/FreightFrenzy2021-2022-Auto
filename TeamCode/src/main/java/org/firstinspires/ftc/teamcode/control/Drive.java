@@ -291,7 +291,7 @@ public class Drive extends LinearOpMode
         telemetry.addData("Lift should be to go down:", (lift_position == Storage.liftHigh));
         telemetry.addData("Lift should be to go up:", (lift_position == Storage.liftIntake));
         telemetry.addData("gamepad1.right_bumper", gamepad1.right_bumper);
-        if (Lift.updatePosition(lift_position, lift) == true) // middle
+        if (MotorPidControl.updatePosition(lift_position, lift) == true) // middle
         {
             if (lift_position == Storage.liftLow) dump_position = Storage.dumpLow;
             if (lift_position == Storage.liftMid) dump_position = Storage.dumpMid;
@@ -322,7 +322,7 @@ public class Drive extends LinearOpMode
             dump_position = Storage.dumpFold; // start
         }
 
-        if(Lift.updatePosition(lift_position, lift)==true
+        if(MotorPidControl.updatePosition(lift_position, lift)==true
                 && lift_position == Storage.liftIntake)
         {
             dump_position= Storage.dumpStraight;

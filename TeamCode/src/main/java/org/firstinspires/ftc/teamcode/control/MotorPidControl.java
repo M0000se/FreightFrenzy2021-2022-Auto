@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.control;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-public class Lift // pid controller.
+public class MotorPidControl // pid controller.
 {
     static boolean updatePosition (int pos, DcMotor motor) // iterative
     {
