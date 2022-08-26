@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.MovingStatistics;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.Robot;
 import org.firstinspires.ftc.teamcode.drive.StandardTrackingWheelLocalizer;
 
 /**
@@ -46,12 +46,12 @@ public class TrackingWheelForwardOffsetTuner extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        Robot drive = new Robot(hardwareMap);
 
         if (!(drive.getLocalizer() instanceof StandardTrackingWheelLocalizer)) {
             RobotLog.setGlobalErrorMsg("StandardTrackingWheelLocalizer is not being set in the "
                     + "drive class. Ensure that \"setLocalizer(new StandardTrackingWheelLocalizer"
-                    + "(hardwareMap));\" is called in SampleMecanumDrive.java");
+                    + "(hardwareMap));\" is called in Robot.java");
         }
 
         telemetry.addLine("Press play to begin the forward offset tuner");

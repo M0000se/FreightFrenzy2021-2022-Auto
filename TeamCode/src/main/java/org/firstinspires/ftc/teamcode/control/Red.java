@@ -14,7 +14,8 @@ import org.firstinspires.ftc.robotcore.external.android.AndroidSoundPool;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.Robot;
+import org.firstinspires.ftc.teamcode.subsystems.Webcam;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 
 //TODO: Uhm, I just thought... we are kinda done if we dont see a duck.
@@ -82,7 +83,7 @@ public class Red extends LinearOpMode //spaghetti code incoming sry
         Servo Dump;
 
 
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        Robot drive = new Robot(hardwareMap);
         Lift = hardwareMap.get(DcMotor.class, "Lift");
         Spinner = hardwareMap.get(DcMotor.class, "Spinner");
         Claw = hardwareMap.get(Servo.class, "Claw");

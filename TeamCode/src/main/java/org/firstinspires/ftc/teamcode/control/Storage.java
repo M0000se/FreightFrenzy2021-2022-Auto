@@ -39,9 +39,6 @@ public class Storage
 
 
     //for freight collection during auto
-    public static double autoTimeLimit = 30; // in seconds
-    public static double run_time_red = 7;
-    public static double run_time_blue = 10;
 
 
 

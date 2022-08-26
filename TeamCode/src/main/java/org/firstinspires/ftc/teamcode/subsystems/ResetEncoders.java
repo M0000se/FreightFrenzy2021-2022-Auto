@@ -1,16 +1,14 @@
-package org.firstinspires.ftc.teamcode.control;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.drive.Robot;
 
-@Disabled
+
 @TeleOp(name = "Reset Encoders")//STARTUP TIME, AFTER WE DROP THE BLOCK TIME, AND SPINNER POINT DELAY
-public class Reset_Encoders extends LinearOpMode //spaghetti code incoming sry
+public class ResetEncoders extends LinearOpMode //spaghetti code incoming sry
 {
     @Override
     public void runOpMode()
@@ -25,7 +23,7 @@ public class Reset_Encoders extends LinearOpMode //spaghetti code incoming sry
         //telemetry.addData("!!! Duc pose = ", duckPose);
         //telemetry.update();
 
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        Robot drive = new Robot(hardwareMap);
 
         //lift.setDirection(DcMotorSimple.Direction.FORWARD);
 
@@ -42,7 +40,7 @@ public class Reset_Encoders extends LinearOpMode //spaghetti code incoming sry
                 else motor.setPower(0);
                 if (gamepad1.a) {
                     //Dump.setPosition(0.5);
-                    lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    drive.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     telemetry.addLine("encoders reset");
                     telemetry.update();
 

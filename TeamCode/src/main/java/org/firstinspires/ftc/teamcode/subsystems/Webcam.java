@@ -1,17 +1,17 @@
-package org.firstinspires.ftc.teamcode.control;
+package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.control.Storage;
+import org.firstinspires.ftc.teamcode.drive.Robot;
+import org.firstinspires.ftc.teamcode.drive.SubsystemConstants;
 
 import java.util.List;
 
 public class Webcam
 {
-    static public int getElementPosition (SampleMecanumDrive drive)
+    static public int getElementPosition (Robot robot)
     {
         if (tfod != null) {
             tfod.activate();
@@ -27,7 +27,7 @@ public class Webcam
 
         /** Wait for the game to begin */
 
-        FtcDashboard.getInstance().startCameraStream(vuforia, 0);
+        FtcDashboard.getInstance().startCameraStream(robot.vuforia, 0);
 
         for (; ; )
         {
@@ -35,7 +35,7 @@ public class Webcam
             {
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
-                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                List<Recognition> updatedRecognitions = robot.tfod.getUpdatedRecognitions();
                 if (updatedRecognitions != null) {
 
                     // step through the list of recognitions and display boundary info.
@@ -46,8 +46,8 @@ public class Webcam
                         // check label to see if the camera now sees a Duck
                         if (recognition.getLabel().equals("Duck")) {            //  ** ADDED **
                             isDuckDetected = true;
-                            if (recognition.getLeft() > Storage.x_center+ Storage.center_accuracy) return 2;
-                            else if (recognition.getLeft() < Storage.x_center- Storage.center_accuracy) return 0;
+                            if (recognition.getLeft() > SubsystemConstants.x_center+ SubsystemConstants.center_accuracy) return 2;
+                            else if (recognition.getLeft() < SubsystemConstants.x_center- SubsystemConstants.center_accuracy) return 0;
                             else return 1; //TODO: test*/
 
                         } else isDuckDetected = false;

@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.drive;
 
-import androidx.annotation.NonNull;
+import  androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
@@ -19,6 +19,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAcceleration
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -54,10 +55,11 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kStatic;
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
 
 /*
- * Simple mecanum drive hardware implementation for REV hardware.
+ * Simple mecanum drive hardware implementation for REV hardware. (originally)
+ * Also implents everything else on the robot. It's position, all it's cameras and sesnors
  */
 @Config
-public class SampleMecanumDrive extends MecanumDrive {
+public class Robot extends MecanumDrive {
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(10, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0);
 
@@ -80,29 +82,28 @@ public class SampleMecanumDrive extends MecanumDrive {
     private BNO055IMU imu;
     private VoltageSensor batteryVoltageSensor;
 
-    public ColorSensor  = hardwareMap.colorSensor.get("color1");
-    public static final double color_error = 90; // max allowed color sensor rgb error
+    public static ColorSensor ColorSensor = hardwareMap.colorSensor.get("color1");
 
     ///////////////////////////////////ROBOT SUBSYSTEMS////////////////////////////////
     //Webcam
-    public static int x_center = 200; //middle of the webcam view
-    public static int center_accuracy = 70;
-    protected static Pose2d currentPose = new Pose2d(); // always keep our position, regardless of auto/teleop
+
+    public static Pose2d currentPose = new Pose2d(); // always keep our position, regardless of auto/teleop
 
     //visual navigation
-    protected static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
-    protected static final String[] LABELS = {
+    private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
+    private static final String[] LABELS = {
             "Ball",
             "Cube",
             "Duck",
             "Marker"
     };
-    protected static final String VUFORIA_KEY =
+    private static final String VUFORIA_KEY =
             "AQ6C1J//////AAABmbFbgnFY8EZ5qg3cWA0ah41DbnifisxJLGcs/rleVs6vR426D48HVqkbcQcAoS2psojauMyRXL6EokX3ArzBtz0MZhNocumRhg5E0AUc8uZL8NAmpq/DwfWrK0tbffRw9VxAcOUVErt01llobKRzcR0vWAfurZ82ZH7a1MVM+ZApi3lxOoJYOEFzbt0JQufS6dYQm31m6/BVfQ63wL+aU3El7rURTxW/2qvSZt6kROmCnaZmNPSdfXGPy8j2xcyKL0vb0pjr8P9FgpktgXYmU5lpGX/lcD40JiLXQGNLD5k2inZtjVYzyvBtPXZ3Z1fqnh5Mp3jcydAa8DofLGHZs2UuC7fkAAAco11XG+w3v9K5";
-    protected static VuforiaLocalizer vuforia;
-    protected static TFObjectDetector tfod;
+    public VuforiaLocalizer vuforia;
+    public TFObjectDetector tfod;
 
-    public SampleMecanumDrive(HardwareMap hardwareMap) {
+    public Robot(HardwareMap hardwareMap)
+    {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
@@ -169,10 +170,14 @@ public class SampleMecanumDrive extends MecanumDrive {
         // For example, if +Y in this diagram faces downwards, you would use AxisDirection.NEG_Y.
         // BNO055IMUUtil.remapZAxis(imu, AxisDirection.NEG_Y);
 
+        //TODO: Think about using an imu
+
         leftFront = hardwareMap.get(DcMotorEx.class, "LeftFront");
         leftRear = hardwareMap.get(DcMotorEx.class, "LeftRear");
         rightRear = hardwareMap.get(DcMotorEx.class, "RightRear");
         rightFront = hardwareMap.get(DcMotorEx.class, "RightFront");
+
+
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
@@ -379,3 +384,6 @@ public class SampleMecanumDrive extends MecanumDrive {
         return new ProfileAccelerationConstraint(maxAccel);
     }
 }
+
+//TODO: Arrange the code here, to make it more readable and separated into subsystems
+//TODO: Check init performance
