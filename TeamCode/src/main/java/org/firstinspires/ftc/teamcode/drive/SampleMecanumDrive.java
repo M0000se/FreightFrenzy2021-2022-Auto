@@ -27,6 +27,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
+import com.qualcomm.robotcore.robot.Robot;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -55,11 +56,13 @@ import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kStatic;
 import static org.firstinspires.ftc.teamcode.drive.DriveConstants.kV;
 
 /*
- * Simple mecanum drive hardware implementation for REV hardware. (originally)
- * Also implents everything else on the robot. It's position, all it's cameras and sesnors
+ * Simple mecanum drivetrain hardware implementation for REV hardware.
  */
 @Config
-public class Robot extends MecanumDrive {
+public class SampleMecanumDrive extends MecanumDrive
+{
+    private RobotHardwareMap hw= new RobotHardwareMap();
+
     public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(10, 0, 0);
     public static PIDCoefficients HEADING_PID = new PIDCoefficients(8, 0, 0);
 
@@ -82,27 +85,12 @@ public class Robot extends MecanumDrive {
     private BNO055IMU imu;
     private VoltageSensor batteryVoltageSensor;
 
-    public static ColorSensor ColorSensor = hardwareMap.colorSensor.get("color1");
-
-    ///////////////////////////////////ROBOT SUBSYSTEMS////////////////////////////////
     //Webcam
 
-    public static Pose2d currentPose = new Pose2d(); // always keep our position, regardless of auto/teleop
 
     //visual navigation
-    private static final String TFOD_MODEL_ASSET = "FreightFrenzy_BCDM.tflite";
-    private static final String[] LABELS = {
-            "Ball",
-            "Cube",
-            "Duck",
-            "Marker"
-    };
-    private static final String VUFORIA_KEY =
-            "AQ6C1J//////AAABmbFbgnFY8EZ5qg3cWA0ah41DbnifisxJLGcs/rleVs6vR426D48HVqkbcQcAoS2psojauMyRXL6EokX3ArzBtz0MZhNocumRhg5E0AUc8uZL8NAmpq/DwfWrK0tbffRw9VxAcOUVErt01llobKRzcR0vWAfurZ82ZH7a1MVM+ZApi3lxOoJYOEFzbt0JQufS6dYQm31m6/BVfQ63wL+aU3El7rURTxW/2qvSZt6kROmCnaZmNPSdfXGPy8j2xcyKL0vb0pjr8P9FgpktgXYmU5lpGX/lcD40JiLXQGNLD5k2inZtjVYzyvBtPXZ3Z1fqnh5Mp3jcydAa8DofLGHZs2UuC7fkAAAco11XG+w3v9K5";
-    public VuforiaLocalizer vuforia;
-    public TFObjectDetector tfod;
 
-    public Robot(HardwareMap hardwareMap)
+    public SampleMecanumDrive(HardwareMap hardwareMap)
     {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
@@ -122,31 +110,6 @@ public class Robot extends MecanumDrive {
         BNO055IMU.Parameters imuParameters = new BNO055IMU.Parameters();
         imuParameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         imu.initialize(imuParameters);
-
-        //================================================================================
-        // INITIALIZING CAMERAS
-        //================================================================================
-        /*
-         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
-         */
-        VuforiaLocalizer.Parameters vuforiaParameters = new VuforiaLocalizer.Parameters();
-
-        vuforiaParameters.vuforiaLicenseKey = VUFORIA_KEY;
-        vuforiaParameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
-
-        //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(vuforiaParameters);
-
-        // Loading trackables is not necessary for the TensorFlow Object Detection engine.
-
-        int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-        tfodParameters.minResultConfidence = 0.2f;
-        tfodParameters.isModelTensorFlow2 = true;
-        tfodParameters.inputSize = 320;
-        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
 
         // TODO: If the hub containing the IMU you are using is mounted so that the "REV" logo does
         // not face up, remap the IMU axes so that the z-axis points upward (normal to the floor.)
@@ -172,10 +135,10 @@ public class Robot extends MecanumDrive {
 
         //TODO: Think about using an imu
 
-        leftFront = hardwareMap.get(DcMotorEx.class, "LeftFront");
-        leftRear = hardwareMap.get(DcMotorEx.class, "LeftRear");
-        rightRear = hardwareMap.get(DcMotorEx.class, "RightRear");
-        rightFront = hardwareMap.get(DcMotorEx.class, "RightFront");
+        leftFront = hw.leftFront;
+        leftRear = hw.leftRear;
+        rightRear = hw.rightRear;
+        rightFront = hw.rightRear;
 
 
 

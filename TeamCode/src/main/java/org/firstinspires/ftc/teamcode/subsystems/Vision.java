@@ -3,18 +3,18 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.FtcDashboard;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.teamcode.control.Storage;
-import org.firstinspires.ftc.teamcode.drive.Robot;
+import org.firstinspires.ftc.teamcode.drive.RobotHardwareMap;
+import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.drive.SubsystemConstants;
 
 import java.util.List;
 
-public class Webcam
+public class Vision
 {
-    static public int getElementPosition (Robot robot)
+    static public int getElementPosition (SampleMecanumDrive sampleMecanumDrive)
     {
-        if (tfod != null) {
-            tfod.activate();
+        if (RobotHardwareMap.tfod != null) {
+            RobotHardwareMap.tfod.activate();
 
             // The TensorFlow software will scale the input images from the camera to a lower resolution.
             // This can result in lower detection accuracy at longer distances (> 55cm or 22").
@@ -22,20 +22,20 @@ public class Webcam
             // to artificially zoom in to the center of image.  For best results, the "aspectRatio" argument
             // should be set to the value of the images used to create the TensorFlow Object Detection model
             // (typically 16/9).
-            tfod.setZoom(1, 16.0 / 9.0);
+            RobotHardwareMap.tfod.setZoom(1, 16.0 / 9.0);
         }
 
         /** Wait for the game to begin */
 
-        FtcDashboard.getInstance().startCameraStream(robot.vuforia, 0);
+        FtcDashboard.getInstance().startCameraStream(RobotHardwareMap.vuforia, 0);
 
         for (; ; )
         {
-            if (tfod != null)
+            if (RobotHardwareMap.tfod != null)
             {
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
-                List<Recognition> updatedRecognitions = robot.tfod.getUpdatedRecognitions();
+                List<Recognition> updatedRecognitions = RobotHardwareMap.tfod.getUpdatedRecognitions();
                 if (updatedRecognitions != null) {
 
                     // step through the list of recognitions and display boundary info.

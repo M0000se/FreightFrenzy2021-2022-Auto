@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import org.firstinspires.ftc.teamcode.control.Storage;
 import org.firstinspires.ftc.teamcode.drive.SubsystemConstants;
 
 public class ColorSensor
