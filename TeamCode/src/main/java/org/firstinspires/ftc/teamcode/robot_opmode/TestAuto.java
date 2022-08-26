@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 @Autonomous (name = "AUTO BLUE")//STARTUP TIME, AFTER WE DROP THE BLOCK TIME, AND SPINNER POINT DELAY
 public class TestAuto extends LinearOpMode
 {
-    RobotHardwareMap drive = new SampleMecanumDrive(hardwareMap);
+    RobotHardwareMap hw = new RobotHardwareMap();
 
     TrajectorySequence Blue;
     // set current position
