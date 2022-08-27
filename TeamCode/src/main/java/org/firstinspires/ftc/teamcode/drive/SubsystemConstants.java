@@ -10,4 +10,6 @@ public final class SubsystemConstants
 
     public static int p_error = 50; // max allowed motor position error
     public static final double p = 0.001;
+
+    public static final int queue_size = 10000;
 }
