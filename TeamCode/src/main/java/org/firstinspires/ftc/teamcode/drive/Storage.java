@@ -26,11 +26,13 @@ public class Storage
     {
         LOOK_FOR_GAME_ELEMENTS
     }
-    class fieldObjects
+
+    //TODO: consider moving these enums and the fieldObjects class
+    public class fieldObjects
     {
         public int x,y,z; //since Im not finding the height at which objects are located (yet), y is always 0
         public OnjectLabel label; // what the object is, eg a duck or a cube
-        public ObjectState state; // for now simply is it collected or on the field
+        public ObjectState state; // for now, simply is it collected or on the field
 
         fieldObjects(int x, int y, int z, OnjectLabel label, ObjectState state)
         {
@@ -43,7 +45,7 @@ public class Storage
     }
     public static Pose2d currentPose = new Pose2d(); // always keep our position, regardless of auto/teleop
     public static BlockingQueue<DepthVisionState> threadTaskQueue = new LinkedBlockingDeque<DepthVisionState>(SubsystemConstants.queue_size); // always keep the task queue
-    public static fieldObjects[] fieldMap = new fieldObjects[1000]; //1000 field objects max
+    public static fieldObjects[] fieldMap = new fieldObjects[SubsystemConstants.max_field_map_size]; //1000 field objects max
     public static int pointer = 0;
 
 }
