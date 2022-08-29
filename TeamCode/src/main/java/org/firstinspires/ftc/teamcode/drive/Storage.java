@@ -16,6 +16,7 @@ public class Storage
     {
         BALL,
         DUCK,
+        CUBE
     }
     public enum ObjectState
     {
@@ -30,7 +31,7 @@ public class Storage
     //TODO: consider moving these enums and the fieldObjects class
     public class fieldObjects
     {
-        public int x,y,z; //since Im not finding the height at which objects are located (yet), y is always 0
+        public int x,y,z; //since Im not finding the height at which objects are located (yet), z is always 0
         public OnjectLabel label; // what the object is, eg a duck or a cube
         public ObjectState state; // for now, simply is it collected or on the field
 

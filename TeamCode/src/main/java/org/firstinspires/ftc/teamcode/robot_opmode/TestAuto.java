@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.drive.RobotHardwareMap;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.utillity.MotorPidControl;
 
 //TODO: Uhm, I just thought... we are kinda screwed if we dont see a duck.
 
@@ -24,6 +25,7 @@ public class TestAuto extends LinearOpMode
 
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
+        MotorPidControl.updatePosition();
 
 
         if(isStopRequested()) return;
