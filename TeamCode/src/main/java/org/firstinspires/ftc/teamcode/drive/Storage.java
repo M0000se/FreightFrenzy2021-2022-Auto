@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.drive;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -45,8 +44,8 @@ public class Storage
         }
     }
     public static Pose2d currentPose = new Pose2d(); // always keep our position, regardless of auto/teleop
-    public static BlockingQueue<DepthVisionState> threadTaskQueue = new LinkedBlockingDeque<DepthVisionState>(SubsystemConstants.queue_size); // always keep the task queue
-    public static fieldObjects[] fieldMap = new fieldObjects[SubsystemConstants.max_field_map_size]; //1000 field objects max
+    public static BlockingQueue<DepthVisionState> threadTaskQueue = new LinkedBlockingDeque<DepthVisionState>(SubsystemConstants.QUEUE_SIZE); // always keep the task queue
+    public static fieldObjects[] fieldMap = new fieldObjects[SubsystemConstants.MAX_FIELD_MAP_SIZE]; //1000 field objects max
     public static int pointer = 0;
 
 }

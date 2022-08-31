@@ -15,11 +15,11 @@ public class ColorSensor
         double sensor_scaled_b = color_sensor.blue() / scalar;
 
         //checks
-        if(!((r+ SubsystemConstants.color_error)>sensor_scaled_r) && (sensor_scaled_r>(r- SubsystemConstants.color_error)))
+        if(!((r+ SubsystemConstants.COLOR_ERROR)>sensor_scaled_r) && (sensor_scaled_r>(r- SubsystemConstants.COLOR_ERROR)))
             return false;
-        if(!((g+ SubsystemConstants.color_error)>sensor_scaled_g) && (sensor_scaled_g>(g- SubsystemConstants.color_error)))
+        if(!((g+ SubsystemConstants.COLOR_ERROR)>sensor_scaled_g) && (sensor_scaled_g>(g- SubsystemConstants.COLOR_ERROR)))
             return false;
-        if(!((b+ SubsystemConstants.color_error)>sensor_scaled_b) && (sensor_scaled_b>(b- SubsystemConstants.color_error)))
+        if(!((b+ SubsystemConstants.COLOR_ERROR)>sensor_scaled_b) && (sensor_scaled_b>(b- SubsystemConstants.COLOR_ERROR)))
             return false;
 
         // it does indeed, see the color
@@ -38,11 +38,11 @@ public class ColorSensor
 
 
         //checks
-        if(!((r+ SubsystemConstants.color_error)>sensor_scaled_r) && (sensor_scaled_r>(r- SubsystemConstants.color_error)))
+        if(!((r+ SubsystemConstants.COLOR_ERROR)>sensor_scaled_r) && (sensor_scaled_r>(r- SubsystemConstants.COLOR_ERROR)))
             return false;
-        if(!((g+ SubsystemConstants.color_error)>sensor_scaled_g) && (sensor_scaled_g>(g- SubsystemConstants.color_error)))
+        if(!((g+ SubsystemConstants.COLOR_ERROR)>sensor_scaled_g) && (sensor_scaled_g>(g- SubsystemConstants.COLOR_ERROR)))
             return false;
-        if(!((b+ SubsystemConstants.color_error)>sensor_scaled_b) && (sensor_scaled_b>(b- SubsystemConstants.color_error)))
+        if(!((b+ SubsystemConstants.COLOR_ERROR)>sensor_scaled_b) && (sensor_scaled_b>(b- SubsystemConstants.COLOR_ERROR)))
             return false;
 
         // it does indeed, see the color

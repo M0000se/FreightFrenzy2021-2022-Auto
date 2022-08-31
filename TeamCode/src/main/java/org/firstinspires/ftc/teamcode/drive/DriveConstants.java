@@ -15,6 +15,9 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
  *
  * These are not the only parameters; some are located in the localizer classes, drive base classes,
  * and op modes themselves.
+ *
+ * !!! SINCE FTC IS SO AMERICAN, THE DEFAULT UNITS ARE INCHES !!!
+ *                       FOR EVERYTHING
  */
 @Config
 public class DriveConstants

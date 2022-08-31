@@ -8,14 +8,14 @@ public class MotorPidControl // pid controller.
 {
     static boolean updatePosition (int pos, DcMotor motor) // iterative
     {
-         if(motor.getCurrentPosition()<(pos- SubsystemConstants.p_error))
+         if(motor.getCurrentPosition()<(pos- SubsystemConstants.P_ERROR))
          {
-             motor.setPower(Math.min(((pos- SubsystemConstants.p_error)-motor.getCurrentPosition())* SubsystemConstants.p,1));
+             motor.setPower(Math.min(((pos- SubsystemConstants.P_ERROR)-motor.getCurrentPosition())* SubsystemConstants.p,1));
              return false;
          }
-         if(motor.getCurrentPosition()>(pos+ SubsystemConstants.p_error))
+         if(motor.getCurrentPosition()>(pos+ SubsystemConstants.P_ERROR))
          {
-             motor.setPower(Math.max(((pos+ SubsystemConstants.p_error)-motor.getCurrentPosition())* SubsystemConstants.p,-1));
+             motor.setPower(Math.max(((pos+ SubsystemConstants.P_ERROR)-motor.getCurrentPosition())* SubsystemConstants.p,-1));
              return false;
          }
          return true; //we are within the accuracy 
@@ -25,13 +25,13 @@ public class MotorPidControl // pid controller.
     {
         while(true)
         {
-            if(motor.getCurrentPosition()<(pos- SubsystemConstants.p_error))
+            if(motor.getCurrentPosition()<(pos- SubsystemConstants.P_ERROR))
             {
-                motor.setPower(Math.min(((pos- SubsystemConstants.p_error)-motor.getCurrentPosition())* SubsystemConstants.p,1));
+                motor.setPower(Math.min(((pos- SubsystemConstants.P_ERROR)-motor.getCurrentPosition())* SubsystemConstants.p,1));
             }
-            else if(motor.getCurrentPosition()>(pos+ SubsystemConstants.p_error))
+            else if(motor.getCurrentPosition()>(pos+ SubsystemConstants.P_ERROR))
             {
-                motor.setPower(Math.max(((pos+ SubsystemConstants.p_error)-motor.getCurrentPosition())* SubsystemConstants.p,-1));
+                motor.setPower(Math.max(((pos+ SubsystemConstants.P_ERROR)-motor.getCurrentPosition())* SubsystemConstants.p,-1));
             }
             else return;
              //we are within the accuracy
