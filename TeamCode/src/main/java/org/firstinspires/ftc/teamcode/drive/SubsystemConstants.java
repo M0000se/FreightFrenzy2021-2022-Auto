@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.drive;
 
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
+
 //Constants for all subsystems
 public final class SubsystemConstants
 {
@@ -13,10 +15,10 @@ public final class SubsystemConstants
     public static int MAX_FIELD_MAP_SIZE = 1000; // maximum number of objects we can store
 
     public static final int QUEUE_SIZE = 10000;
-    public static final int DEPTH_CAMERA_X = 0; //from the center of the robot (the coordinate system Roadunner uses)
+    public static final int DV_X_OFFSET = 0; //from the center of the robot (the coordinate system Roadunner uses)
     // TODO: set the value WILL NOT WORK WITHOUT THAT
-    public static final int DEPTH_CAMERA_X_OFFSET = 0; //from the coordinate system of the x rotation servo
-    public static final int DIST_SENSOR_X_OFFSET = 0;
-
-    publi
+    public static final int DV_CAMERA_X_OFFSET = 0; //from the coordinate system of the x rotation servo
+    public static final int DV_DIST_SENSOR_X_OFFSET = 0;
+    public static final double DV_KP = 0, DV_KI = 0, DV_KD = 0, DV_KF = 0;
+    public static final double DV_TOLERENCE = 0;
 }

@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems.depth_vision;
 
 import androidx.annotation.Nullable;
 
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
@@ -108,26 +109,54 @@ public class DepthVision implements Runnable
         SetServoPosition(x_position, y_position);
     }
 
-    // aims and finds all the parameters of WHAT'S CLOSEST to the distance sensor, at any given point it will,
-    // try aiming at that.
-    // no tracking has been implemented yet, hence we cant get the params of some specific object, sorry
+    /**
+     *  aims and finds what's closest to a given object,
+     *  try aiming at that.This uses centroid tracking, and since the game elements are not substantially unique,
+     *  low enough frame rate may give you the data of a wrong object
+     * @param 
+     */
     // TODO: !! implement Deep SORT to actually track targets and get the cords of the recognition !!
-    private Storage.fieldObjects asyncCalculateAnyCords()
+    private Storage.fieldObjects calculateCords()
     {
-        // the math is documented in my separate set of notes
+        // Check if we see anything
         List<Recognition> recognitions;
-        recognitions = RobotHardwareMap.tfod.getRecognitions();
-        while(!) //! aimed from the calculations
-        if(aimed) //finish this from calculations
+        Storage.fieldObjects target_object = new Storage.fieldObjects;
+
+        // the math is documented in my separate set of notes
+
+        double x_current_dif;
+        double x_required_dif;
+        double x_change;
+
+        com.arcrobotics.ftclib.controller.PIDFController pidf =
+                new PIDFController(SubsystemConstants.DV_KP, SubsystemConstants.DV_KI, SubsystemConstants.DV_KD, SubsystemConstants.DV_KF);
+
+        x_required_dif = SubsystemConstants.DV_CAMERA_X_OFFSET - SubsystemConstants.DV_DIST_SENSOR_X_OFFSET;
+        pidf.setSetPoint(x_required_dif);
+
+        while(!pidf.atSetPoint() && (recognitions != null))
         {
-            Storage.fieldObjects target_data = new Storage.fieldObjects;
-            target_data. x =
-                    Storage.currentPose.getX() + SubsystemConstants.DEPTH_CAMERA_X + Math.sin(x_servo.getPosition()) *
+            recognitions = RobotHardwareMap.tfod.getRecognitions();
+            Recognition cur_recognition = get_closest_recognition();
+
+            x_current_dif = SubsystemConstants.VIEW_CENTER_X-(cur_recognition.getLeft() + cur_recognition.getWidth());
+            x_change = pidf.calculate(x_current_dif);
+
+            DV_CAMERA_X_OFFSET
         }
+        if(pidf.atSetPoint()) //finish this from calculations
+        {
+            target_object.y =
+                    target_object.x =
+                            Storage.currentPose.getX() + SubsystemConstants.DV_X_OFFSET + Math.sin(x_servo.getPosition())
+            return target_object
+        }
+        else return null;
+
 
     }
 
-    private void SetServoPosition(double x, double y) // every servo_position modification goes through here
+    private void setServoPosition(double x, double y) // every servo_position modification goes through here
     {
         x_servo.setPosition(x);
         y_servo.setPosition(y);
