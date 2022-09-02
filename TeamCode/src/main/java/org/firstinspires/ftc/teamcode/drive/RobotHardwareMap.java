@@ -3,23 +3,21 @@ package org.firstinspires.ftc.teamcode.drive;
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.teamcode.subsystems.DistanceSensor;
 
 //For keeping all and everything connected to the robot in one place
 public class RobotHardwareMap
 {
     public DcMotorEx leftFront, leftRear, rightRear, rightFront;
     public Servo servoX, servoY;
-    public DistanceSensor navDistanceSensor;
+    public com.qualcomm.robotcore.hardware.DistanceSensor navDistanceSensor;
     //public static ColorSensor ColorSensor;
     //TODO: add distance sensor
     //TODO: consider making them static

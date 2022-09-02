@@ -1,15 +1,28 @@
 package org.firstinspires.ftc.teamcode.subsystems.depth_vision;
 
-import androidx.annotation.Nullable;
+import static org.firstinspires.ftc.teamcode.drive.SubsystemConstants.DV_CAMERA_X_OFFSET;
+import static org.firstinspires.ftc.teamcode.drive.SubsystemConstants.DV_DIST_SENSOR_X_OFFSET;
+import static org.firstinspires.ftc.teamcode.drive.SubsystemConstants.DV_DIST_SENSOR_Y_OFFSET;
+import static org.firstinspires.ftc.teamcode.drive.SubsystemConstants.DV_X_OFFSET;
+import static org.firstinspires.ftc.teamcode.drive.SubsystemConstants.DV_X_TOLERENCE;
+import static org.firstinspires.ftc.teamcode.drive.SubsystemConstants.DV_Y_OFFSET;
+import static org.firstinspires.ftc.teamcode.drive.SubsystemConstants.DV_Y_TOLERENCE;
+import static org.firstinspires.ftc.teamcode.drive.SubsystemConstants.VIEW_CENTER_X;
+import static org.firstinspires.ftc.teamcode.drive.SubsystemConstants.VIEW_CENTER_Y;
+import static java.lang.Math.abs;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
 
 import com.arcrobotics.ftclib.controller.PIDFController;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.drive.RobotHardwareMap;
 import org.firstinspires.ftc.teamcode.drive.Storage;
 import org.firstinspires.ftc.teamcode.drive.SubsystemConstants;
-import org.firstinspires.ftc.teamcode.subsystems.DistanceSensor;
 
 import java.util.List;
 
@@ -25,6 +38,18 @@ public class DepthVision implements Runnable
 
     Servo x_servo;
     Servo y_servo;
+
+    class FlatCords
+    {
+        double x;
+        double y;
+        FlatCords(double _x, double _y)
+        {
+            this.x = _x;
+            this.y = _y;
+        }
+        FlatCords() {}
+    }
 
     //geometry incoming
     public void run() // EVERY dv substask gets called from here
@@ -106,58 +131,112 @@ public class DepthVision implements Runnable
                 y_rampUp = !y_rampUp;  // Switch ramp direction
             }
         }
-        SetServoPosition(x_position, y_position);
+        setServoPosition(x_position, y_position);
     }
 
     /**
-     *  aims and finds what's closest to a given object,
-     *  try aiming at that.This uses centroid tracking, and since the game elements are not substantially unique,
-     *  low enough frame rate may give you the data of a wrong object
-     * @param 
+     *  aims and finds the coordinates of what's closest to a given object,
+     *  This uses centroid tracking, and since the game elements are not substantially unique,
+     *  low enough frame rate / high enough robot movement speed / similar object locations
+     *  may give you the data of a wrong object
+     * @param recognition the given object
+     * @return
      */
     // TODO: !! implement Deep SORT to actually track targets and get the cords of the recognition !!
-    private Storage.fieldObjects calculateCords()
+    private Storage.fieldObject calculateCords(Recognition target_object)
     {
-        // Check if we see anything
+        com.arcrobotics.ftclib.controller.PIDFController pidf_x =
+                new PIDFController(SubsystemConstants.DV_X_KP, SubsystemConstants.DV_X_KI,
+                        SubsystemConstants.DV_X_KD, SubsystemConstants.DV_X_KF);
+        com.arcrobotics.ftclib.controller.PIDFController pidf_y =
+                new PIDFController(SubsystemConstants.DV_Y_KP, SubsystemConstants.DV_Y_KI,
+                        SubsystemConstants.DV_Y_KD, SubsystemConstants.DV_Y_KF);
+
         List<Recognition> recognitions;
-        Storage.fieldObjects target_object = new Storage.fieldObjects;
+        recognitions = RobotHardwareMap.tfod.getRecognitions();
 
-        // the math is documented in my separate set of notes
-
-        double x_current_dif;
-        double x_required_dif;
         double x_change;
+        double y_change;
 
-        com.arcrobotics.ftclib.controller.PIDFController pidf =
-                new PIDFController(SubsystemConstants.DV_KP, SubsystemConstants.DV_KI, SubsystemConstants.DV_KD, SubsystemConstants.DV_KF);
+        FlatCords target_cords = getCenterCords(target_object);
 
-        x_required_dif = SubsystemConstants.DV_CAMERA_X_OFFSET - SubsystemConstants.DV_DIST_SENSOR_X_OFFSET;
-        pidf.setSetPoint(x_required_dif);
+        pidf_x.setSetPoint(DV_CAMERA_X_OFFSET - DV_DIST_SENSOR_X_OFFSET);
+        pidf_y.setSetPoint(0);
 
-        while(!pidf.atSetPoint() && (recognitions != null))
+        pidf_x.setTolerance(DV_X_TOLERENCE);
+        pidf_x.setTolerance(DV_Y_TOLERENCE);
+
+        while(!pidf_y.atSetPoint() && !pidf_x.atSetPoint() && !(recognitions == null))
         {
+            int num_of_recognitions = recognitions.size();
+            int min_dist_index = 0;
+            double min_dist_value = Double.MAX_VALUE;
+            int i = 0;
+            for(Recognition recognition : recognitions)
+            {
+                FlatCords current_cords = getCenterCords(recognition);
+
+                double current_x_dist = abs(target_cords.x - current_cords.x);
+                double current_y_dist = abs(target_cords.y - current_cords.y);
+                double current_dist = sqrt(current_x_dist * current_x_dist + current_y_dist * current_y_dist;
+                if(min_dist_value > current_dist)
+                {
+                    min_dist_index = i;
+                    min_dist_value = current_dist;
+                }
+                i++;
+            }
+            target_object = recognitions.get(min_dist_index); // position of the target object as of pidf calculation
+            target_cords = getCenterCords(target_object);
+            x_change = pidf_x.calculate(VIEW_CENTER_X - target_cords.x);
+            y_change = pidf_y.calculate(VIEW_CENTER_Y - target_cords.y);
+            setServoPosition(DV_x_angle + x_change, DV_y_angle + y_change); //adjust the servo
             recognitions = RobotHardwareMap.tfod.getRecognitions();
-            Recognition cur_recognition = get_closest_recognition();
-
-            x_current_dif = SubsystemConstants.VIEW_CENTER_X-(cur_recognition.getLeft() + cur_recognition.getWidth());
-            x_change = pidf.calculate(x_current_dif);
-
-            DV_CAMERA_X_OFFSET
         }
-        if(pidf.atSetPoint()) //finish this from calculations
+        if(pidf_y.atSetPoint() && pidf_x.atSetPoint())
         {
-            target_object.y =
-                    target_object.x =
-                            Storage.currentPose.getX() + SubsystemConstants.DV_X_OFFSET + Math.sin(x_servo.getPosition())
-            return target_object
+            double measured_dist = dist_sensor.getDistance(DistanceUnit.INCH);
+            Storage.fieldObject target_object_field_coordinates = new Storage.fieldObject();
+            target_object_field_coordinates.x =
+                    Storage.currentPose.getX() + DV_X_OFFSET + sin(DV_x_angle) * (measured_dist+DV_DIST_SENSOR_Y_OFFSET)
+                            + cos(DV_x_angle) * DV_DIST_SENSOR_X_OFFSET;
+            target_object_field_coordinates.y =
+                    Storage.currentPose.getY() + DV_Y_OFFSET + sin(DV_y_angle) * measured_dist;
+
         }
         else return null;
 
 
     }
 
-    private void setServoPosition(double x, double y) // every servo_position modification goes through here
+
+    /**
+     * finds
+     * @param target_object
+     * @return true if it aimed successfully, and false if it couldn't
+     */
+    private boolean aimAtClosestRecognition(Recognition target_object)
     {
+
+    }
+
+    /**
+     * Returns the coordinates from the center of the camera view to the middle of an object
+     * @param recognition camera recognition
+     * @return flat_cords Middle
+     */
+    private FlatCords getCenterCords(Recognition recognition)
+    {
+        FlatCords flat_cords = new FlatCords();
+        flat_cords.x = recognition.getLeft() + recognition.getWidth()/2 - VIEW_CENTER_X;
+        flat_cords.y = recognition.getBottom() + recognition.getHeight()/2 - VIEW_CENTER_Y;
+        return flat_cords;
+    }
+
+    private void setServoPosition(double x, double y)
+    {
+        DV_x_angle = x;
+        DV_y_angle = y;
         x_servo.setPosition(x);
         y_servo.setPosition(y);
     }
@@ -188,8 +267,8 @@ public class DepthVision implements Runnable
                         // check label to see if the camera now sees a Duck
                         if (recognition.getLabel().equals("Duck")) {            //  ** ADDED **
                             isDuckDetected = true;
-                            if (recognition.getLeft() > SubsystemConstants.x_center+ SubsystemConstants.CENTER_ACCURACY) return 2;
-                            else if (recognition.getLeft() < SubsystemConstants.x_center- SubsystemConstants.CENTER_ACCURACY) return 0;
+                            if (recognition.getLeft() > SubsystemConstants.x_center + SubsystemConstants.CENTER_ACCURACY) return 2;
+                            else if (recognition.getLeft() < SubsystemConstants.x_center - SubsystemConstants.CENTER_ACCURACY) return 0;
                             else return 1; //TODO: test
 
                         } else isDuckDetected = false;
