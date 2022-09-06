@@ -1,9 +1,8 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
-import org.firstinspires.ftc.teamcode.drive.SubsystemConstants;
-
 public class ColorSensor
 {
+    public static final double COLOR_ERROR = 90; // max allowed color sensor rgb error
 
     static boolean see_rgb (int r, int g, int b, com.qualcomm.robotcore.hardware.ColorSensor color_sensor)
     // does the color_sensor see the color? scaling function to compare the real
@@ -15,11 +14,11 @@ public class ColorSensor
         double sensor_scaled_b = color_sensor.blue() / scalar;
 
         //checks
-        if(!((r+ SubsystemConstants.COLOR_ERROR)>sensor_scaled_r) && (sensor_scaled_r>(r- SubsystemConstants.COLOR_ERROR)))
+        if(!((r+ COLOR_ERROR)>sensor_scaled_r) && (sensor_scaled_r>(r- COLOR_ERROR)))
             return false;
-        if(!((g+ SubsystemConstants.COLOR_ERROR)>sensor_scaled_g) && (sensor_scaled_g>(g- SubsystemConstants.COLOR_ERROR)))
+        if(!((g+ COLOR_ERROR)>sensor_scaled_g) && (sensor_scaled_g>(g- COLOR_ERROR)))
             return false;
-        if(!((b+ SubsystemConstants.COLOR_ERROR)>sensor_scaled_b) && (sensor_scaled_b>(b- SubsystemConstants.COLOR_ERROR)))
+        if(!((b+ COLOR_ERROR)>sensor_scaled_b) && (sensor_scaled_b>(b- COLOR_ERROR)))
             return false;
 
         // it does indeed, see the color
@@ -38,11 +37,11 @@ public class ColorSensor
 
 
         //checks
-        if(!((r+ SubsystemConstants.COLOR_ERROR)>sensor_scaled_r) && (sensor_scaled_r>(r- SubsystemConstants.COLOR_ERROR)))
+        if(!((r+ COLOR_ERROR)>sensor_scaled_r) && (sensor_scaled_r>(r- COLOR_ERROR)))
             return false;
-        if(!((g+ SubsystemConstants.COLOR_ERROR)>sensor_scaled_g) && (sensor_scaled_g>(g- SubsystemConstants.COLOR_ERROR)))
+        if(!((g+ COLOR_ERROR)>sensor_scaled_g) && (sensor_scaled_g>(g- COLOR_ERROR)))
             return false;
-        if(!((b+ SubsystemConstants.COLOR_ERROR)>sensor_scaled_b) && (sensor_scaled_b>(b- SubsystemConstants.COLOR_ERROR)))
+        if(!((b+ COLOR_ERROR)>sensor_scaled_b) && (sensor_scaled_b>(b- COLOR_ERROR)))
             return false;
 
         // it does indeed, see the color
