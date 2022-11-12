@@ -31,13 +31,13 @@ public class Storage
     }
 
     //TODO: consider moving these enums and the fieldObjects class
-    public class fieldObject
+    static public class fieldObject
     {
         public double x,y,z; //since Im not finding the height at which objects are located (yet), z is always 0
         public ObjectLabel label; // what the object is, eg a duck or a cube
         public ObjectState state; // for now, simply is it collected or on the field
 
-        fieldObject(double x, double y, double z, ObjectLabel label, ObjectState state)
+        public fieldObject(double x, double y, double z, ObjectLabel label, ObjectState state)
         {
             this.x = x;
             this.y = y;
@@ -45,7 +45,7 @@ public class Storage
             this.label = label;
             this.state = state;
         }
-        fieldObject() {}
+        public fieldObject() {}
 
     }
     public static Pose2d currentPose = new Pose2d(); // always keep our position, regardless of auto/teleop

@@ -16,6 +16,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 public class RobotHardwareMap
 {
     public DcMotorEx leftFront, leftRear, rightRear, rightFront;
+    public DcMotorEx lift;
     public Servo servoX, servoY;
     public com.qualcomm.robotcore.hardware.DistanceSensor navDistanceSensor;
     //public static ColorSensor ColorSensor;
@@ -44,6 +45,8 @@ public class RobotHardwareMap
         leftRear = hardwareMap.get(DcMotorEx.class,"leftRear");
         rightFront = hardwareMap.get(DcMotorEx.class,"rightFront");
         rightRear = hardwareMap.get(DcMotorEx.class,"rightRear");
+
+        lift = hardwareMap.get(DcMotorEx.class,"lift");
 
         servoX = hardwareMap.get(Servo.class,"servoX");
         servoY = hardwareMap.get(Servo.class,"servoY");

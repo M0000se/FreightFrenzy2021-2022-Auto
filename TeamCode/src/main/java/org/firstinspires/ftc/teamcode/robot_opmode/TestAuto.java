@@ -25,7 +25,7 @@ public class TestAuto extends LinearOpMode
 
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
-        MotorPidControl.updatePosition();
+        //MotorPidControl.updatePosition();
 
 
         if(isStopRequested()) return;

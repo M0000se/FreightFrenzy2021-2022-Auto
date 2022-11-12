@@ -208,7 +208,7 @@ public class DepthVision implements Runnable
 
                 double current_x_dist = abs(target_cords.x - current_cords.x);
                 double current_y_dist = abs(target_cords.y - current_cords.y);
-                double current_dist = sqrt(current_x_dist * current_x_dist + current_y_dist * current_y_dist;
+                double current_dist = sqrt(current_x_dist * current_x_dist + current_y_dist * current_y_dist);
                 if(min_dist_value > current_dist)
                 {
                     min_dist_index = i;
@@ -270,3 +270,61 @@ public class DepthVision implements Runnable
         y_servo.setPosition(y);
     }
 }
+
+
+
+// TODO: Stashed from earlier
+
+/*
+
+  }
+        SetServoPosition(x_position, y_position);
+        setServoPosition(x_position, y_position);
+    }
+
+    /**
+     *  aims and finds what's closest to a given object,
+     *  try aiming at that.This uses centroid tracking, and since the game elements are not substantially unique,
+     *  low enough frame rate may give you the data of a wrong object
+     * @param
+     *  Also, it only measures the current position so the initial position might not
+     *  be the result if it's moving
+     *  @param
+
+// TODO: !! implement Deep SORT to actually track targets and get the cords of the recognition !!
+private Storage.fieldObjects calculateCords()
+{
+    // Check if we see anything
+
+    List<Recognition> recognitions;
+    Storage.fieldObjects target_object = new Storage.fieldObjects;
+
+    @ -127,6 +130,7 @@ public class DepthVision implements Runnable
+    double x_current_dif;
+    double x_required_dif;
+    double x_change;
+    Recognition Recognition;
+
+    com.arcrobotics.ftclib.controller.PIDFController pidf =
+            new PIDFController(SubsystemConstants.DV_KP, SubsystemConstants.DV_KI, SubsystemConstants.DV_KD, SubsystemConstants.DV_KF);
+    @ -136,8 +140,7 @@ public class DepthVision implements Runnable
+
+    while(!pidf.atSetPoint() && (recognitions != null))
+    {
+        recognitions = RobotHardwareMap.tfod.getRecognitions();
+        Recognition cur_recognition = get_closest_recognition();
+        cur_recognition = getClosestRecognition();
+
+        x_current_dif = SubsystemConstants.VIEW_CENTER_X-(cur_recognition.getLeft() + cur_recognition.getWidth());
+        x_change = pidf.calculate(x_current_dif);
+        @ -154,6 +157,11 @@ public class DepthVision implements Runnable
+        else return null;
+
+
+    }
+
+    private Recognition void getClosestRecognition ()
+    {
+
+    }
+ */
