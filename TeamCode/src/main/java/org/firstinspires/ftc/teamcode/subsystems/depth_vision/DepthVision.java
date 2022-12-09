@@ -4,6 +4,7 @@ import static java.lang.Math.abs;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
+import static java.lang.Thread.sleep;
 
 import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
@@ -11,51 +12,52 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.teamcode.drive.Navigation;
+import org.firstinspires.ftc.teamcode.drive.navigation.Navigation;
 import org.firstinspires.ftc.teamcode.drive.RobotHardwareMap;
-import org.firstinspires.ftc.teamcode.drive.Storage;
+import org.firstinspires.ftc.teamcode.drive.navigation.data_types.FlatCords;
+import org.firstinspires.ftc.teamcode.drive.navigation.data_types.ObjectLabel;
+import org.firstinspires.ftc.teamcode.drive.navigation.data_types.ObjectState;
+import org.firstinspires.ftc.teamcode.drive.navigation.data_types.fieldObject;
 
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
 // everything "shared" for the depth camera (task manager and shared task methods)
 // basically the whole thing is like the op-mode code structure ftc is using, but on a smaller scale
 // TODO: MOST IMPORTANT implement object tracking to step through recognitions and differentiate between different ones.
 public class DepthVision implements Runnable
 {
+    public enum DepthVisionState //what if you don't want to LOOK FOR GAME ELEMENTS, but, for example, want to make the distance servo DANCE? expand it
+    {
+        LOOK_FOR_GAME_ELEMENTS
+    }
+
+    private static final int QUEUE_SIZE = 10000;
+    public static BlockingQueue<DepthVisionState> threadTaskQueue = new LinkedBlockingDeque<DepthVisionState>(QUEUE_SIZE); // always keep the task queue
+
     private final static int DV_X_OFFSET = 0; //from the center of the robot (the coordinate system Roadunner uses)
     private final static int DV_Y_OFFSET = 0;
     private final static int DV_CAMERA_X_OFFSET = 0; //from the coordinate system of the x rotation servo
     private final static int DV_DIST_SENSOR_X_OFFSET = 0;
     private final static int DV_DIST_SENSOR_Y_OFFSET = 0;
-    private final static double DV_X_KP = 0, DV_X_KI = 0, DV_X_KD = 0, DV_X_KF = 0;
-    private final static double DV_X_TOLERANCE = 0;
-    private final static double DV_Y_KP = 0, DV_Y_KI = 0, DV_Y_KD = 0, DV_Y_KF = 0;
-    private final static double DV_Y_TOLERANCE = 0;
+    private final static double DV_X_KP = 1, DV_X_KI = 0, DV_X_KD = 0, DV_X_KF = 0;
+    private final static double DV_X_TOLERANCE = 1;
+    private final static double DV_Y_KP = 1, DV_Y_KI = 0, DV_Y_KD = 0, DV_Y_KF = 0;
+    private final static double DV_Y_TOLERANCE = 1;
 
-    public final static int VIEW_CENTER_X = 200; //middle of the webcam view
-    public final static int VIEW_CENTER_Y = 200; //middle of the webcam view
-    public final static int CENTER_ACCURACY = 70;
+    private final static int VIEW_CENTER_X = 200; //middle of the webcam view
+    private final static int VIEW_CENTER_Y = 200; //middle of the webcam view
+    private final static int CENTER_ACCURACY = 70;
 
-    static double DV_x_angle;
-    static double DV_y_angle;
+    private static double DV_x_angle;
+    private static double DV_y_angle;
 
     //to implicitly restrict access to those to only other task classes
     DistanceSensor dist_sensor;
 
     Servo x_servo;
     Servo y_servo;
-
-    class FlatCords
-    {
-        double x;
-        double y;
-        FlatCords(double _x, double _y)
-        {
-            this.x = _x;
-            this.y = _y;
-        }
-        FlatCords() {}
-    }
 
     //geometry incoming
     public void run() // EVERY dv substask gets called from here
@@ -67,24 +69,24 @@ public class DepthVision implements Runnable
 
         dist_sensor = hw.navDistanceSensor;
 
-        while(!Storage.threadTaskQueue.isEmpty()) // YOU'RE IN THIS LOOP UNLESS NOTHING HAS TO HAPPEN WITH VISION
+        while(!threadTaskQueue.isEmpty()) // YOU'RE IN THIS LOOP UNLESS NOTHING HAS TO HAPPEN WITH VISION
         {
-            if(Storage.threadTaskQueue.element() == Storage.DepthVisionState.LOOK_FOR_GAME_ELEMENTS)
+            if(threadTaskQueue.element() == DepthVisionState.LOOK_FOR_GAME_ELEMENTS)
             {
                 //initialization
                 List<Recognition> recognitions = RobotHardwareMap.tfod.getRecognitions();
                 int cur_index = 0;
-                while (Storage.threadTaskQueue.element() == Storage.DepthVisionState.LOOK_FOR_GAME_ELEMENTS)
+                while (threadTaskQueue.element() == DepthVisionState.LOOK_FOR_GAME_ELEMENTS)
                 {
                     if (recognitions != null)
                     {
-                        Storage.fieldObject recognised_object = calculateCords(recognitions.get(cur_index));
+                        fieldObject recognised_object = calculateCords(recognitions.get(cur_index));
                         if (recognised_object != null)
                         {
                             if(!Navigation.isMapped(recognised_object))
                             {
-                                Storage.fieldMap[Storage.fieldMap_size] = recognised_object;
-                                Storage.fieldMap_size++;
+                                Navigation.fieldMap[Navigation.fieldMap_size] = recognised_object;
+                                Navigation.fieldMap_size++;
                             }
                             recognitions = RobotHardwareMap.tfod.getRecognitions();
                             // we were at 1, if 2 amd size 2, doesnt work
@@ -94,8 +96,10 @@ public class DepthVision implements Runnable
                             // is this way, that works perfectly only when we are staying still.
                             //TODO: TOP PAGE
                         }
-                    } else asyncScan(0, 0, 0, 0,
-                            0, 0, 0, 0);//TODO: set values
+                    } else
+                        asyncScan(0.1, 1, 0,
+                                  0, 0, 0,
+                                  100);//TODO: set values
                 }
             }
         }
@@ -114,8 +118,8 @@ public class DepthVision implements Runnable
        */
     boolean x_rampUp = true;
     boolean y_rampUp = true;
-    private void asyncScan(double x_increment, int x_cycle_ms, double x_max_pos, double x_min_pos,
-                           double y_increment, int y_cycle_ms, double y_max_pos, double y_min_pos)
+    private void asyncScan(double x_increment, double x_max_pos, double x_min_pos,
+                           double y_increment, double y_max_pos, double y_min_pos, int x_cycle_ms)
     {
         // Define class members
         double  x_position = (x_max_pos - x_min_pos) / 2; // Start at halfway position
@@ -160,6 +164,11 @@ public class DepthVision implements Runnable
             }
         }
         setServoPosition(x_position, y_position);
+        try {
+            Thread.sleep(x_cycle_ms);
+        } catch(InterruptedException e) {
+            System.out.println("got interrupted!");
+        }
     }
 
 
@@ -173,7 +182,7 @@ public class DepthVision implements Runnable
      * @return
      */
     // TODO: !! implement Deep SORT to actually track targets and get the cords of the recognition !!
-    private Storage.fieldObject calculateCords(Recognition target_object)
+    private fieldObject calculateCords(Recognition target_object)
     {
         com.arcrobotics.ftclib.controller.PIDFController pidf_x =
                 new PIDFController(DV_X_KP, DV_X_KI,
@@ -226,23 +235,23 @@ public class DepthVision implements Runnable
         if(pidf_y.atSetPoint() && pidf_x.atSetPoint())
         {
             double measured_dist = dist_sensor.getDistance(DistanceUnit.INCH);
-            Storage.fieldObject target_object_field_coordinates = new Storage.fieldObject();
+            fieldObject target_object_field_coordinates = new fieldObject();
             target_object_field_coordinates.x =
-                    Storage.currentPose.getX() + DV_X_OFFSET + sin(DV_x_angle) * (measured_dist+DV_DIST_SENSOR_Y_OFFSET)
+                    Navigation.currentPose.getX() + DV_X_OFFSET + sin(DV_x_angle) * (measured_dist+DV_DIST_SENSOR_Y_OFFSET)
                             + cos(DV_x_angle) * DV_DIST_SENSOR_X_OFFSET;
             target_object_field_coordinates.y =
-                    Storage.currentPose.getY() + DV_Y_OFFSET + sin(DV_y_angle) * measured_dist;
+                    Navigation.currentPose.getY() + DV_Y_OFFSET + sin(DV_y_angle) * measured_dist;
             // an accurate
             switch (target_object.getLabel())
             {
-                case "Ball": target_object_field_coordinates.label = Storage.ObjectLabel.BALL;
+                case "Ball": target_object_field_coordinates.label = ObjectLabel.BALL;
                     break;
-                case "Cube": target_object_field_coordinates.label = Storage.ObjectLabel.CUBE;
+                case "Cube": target_object_field_coordinates.label = ObjectLabel.CUBE;
                     break;
-                case "Duck": target_object_field_coordinates.label = Storage.ObjectLabel.DUCK;
+                case "Duck": target_object_field_coordinates.label = ObjectLabel.DUCK;
                     break;
             }
-            target_object_field_coordinates.state = Storage.ObjectState.ON_THE_FIELD;
+            target_object_field_coordinates.state = ObjectState.ON_THE_FIELD;
             return target_object_field_coordinates;
         }
         return null;
