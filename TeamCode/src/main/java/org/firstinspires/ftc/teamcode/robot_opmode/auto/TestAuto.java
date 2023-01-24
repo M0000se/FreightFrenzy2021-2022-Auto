@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.robot_opmode;
+package org.firstinspires.ftc.teamcode.robot_opmode.auto;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -23,10 +23,7 @@ public class TestAuto extends LinearOpMode
         /////////////////////////// INITIALISATION ////////////////////////////
         telemetry.addData(">", "Press Play to start op mode");
         telemetry.update();
-<<<<<<< Updated upstream
-        //MotorPidControl.updatePosition();
-=======
->>>>>>> Stashed changes
+
 
         RobotHardwareMap hw = new RobotHardwareMap();
         hw.initVision();

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.robot_opmode.opmode;
+package org.firstinspires.ftc.teamcode.robot_opmode.rr_opmode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.drive.Roadrunner.SampleMecanumDrive;
 @Config
 @Disabled
 @Autonomous(group = "drive")
-public class StraightTest extends LinearOpMode {
+public class StrafeTest extends LinearOpMode {
     public static double DISTANCE = 60; // in
 
     @Override
@@ -27,7 +27,7 @@ public class StraightTest extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         Trajectory trajectory = drive.trajectoryBuilder(new Pose2d())
-                .forward(DISTANCE)
+                .strafeRight(DISTANCE)
                 .build();
 
         waitForStart();
